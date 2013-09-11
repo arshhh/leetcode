@@ -17,8 +17,8 @@ public:
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
         
-        int length = 1;
-       	 int size = dict.size();
+        int length = 2;
+            int size = dict.size();
 	 string* stack1 = new string[size];
 	string* stack2   = new string[size];
 	int size1=0;
@@ -43,11 +43,15 @@ public:
 			    	stack2[size2] = ss;
 			    	size2++;
 			    	dict.erase(iter++);
-                }		
+                }
+                else{
+                    iter++;
+                }
 		}
 	}
 	stack1 = stack2;
 	size1 = size2;
+	stack2 = stack1;
 	}
 	return 0;
     }
