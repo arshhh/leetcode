@@ -1,0 +1,45 @@
+class Solution {
+public:
+   bool isValid(string s,int i){
+    if( (s[i]>='a' && s[i]<='z') || (s[i]>='A' & s[i]<='Z') || (s[i]>='0' &&s[i]<='9') )
+		return true;
+	return false;
+}
+    int abs(int n){
+        if(n<0)
+            return 0-n;
+        return n;
+    }
+    bool isPalindrome(string s) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+
+        if(s.size() == 0)
+	return true;
+        int startIndex = 0;
+        int endIndex = s.size() -1 ;
+        int diff = 'a'-'A';
+        while(endIndex>startIndex){
+	while(startIndex<s.size() && !isValid(s,startIndex))
+		startIndex++;
+	if(startIndex == s.size() )
+		break;
+        
+	while(endIndex>-1 && !isValid(s,endIndex) )
+		endIndex--;
+	if(endIndex == -1)
+		break;
+    int d = abs(s[startIndex]-s[endIndex]);
+	if(d==0 || d==diff) 
+		{
+		startIndex++;
+		endIndex--;
+	}
+	else
+		return false;
+		
+	}
+	return true;
+    }
+};
+
