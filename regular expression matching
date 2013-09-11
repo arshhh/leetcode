@@ -1,0 +1,39 @@
+class Solution {
+public:
+    bool isFinished(const char* p){
+        if(p[0] == '\0')
+            return true;
+        if(strlen(p)>1 && p[1] =='*' )
+            return isFinished(&p[2]);
+        
+        return false;
+        
+    }
+    bool isMatch(const char *s, const char *p) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function    
+          if(s==NULL or p == NULL)
+        return false;   
+        if( s[0] == '\0' && isFinished(p) )
+             return true;
+    
+        if( s[0] =='\0' || p[0] == '\0' )
+	        return false;
+            
+        if(strlen(p)>1 && p[1] == '*'){
+		//doesn’t consider the *
+		if(isMatch(s,&p[2]))
+			return true;
+		if( s[0] == p[0] || p[0] == '.' )
+			return isMatch(&s[1],p);
+		else
+			return false;
+	}
+	else{
+		if(s[0] == p[0] || p[0] == '.' )
+			return isMatch(&s[1],&p[1]);
+		return false;
+	}
+
+    }
+};
