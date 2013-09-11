@@ -1,0 +1,85 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+int getMax(int i,int j){
+        int max = i;
+    if(j>max)
+		max = j;
+    return max;
+    
+}
+int getMax(int i,int j, int k){
+    int max = i;
+	if(j>max)
+		max = j;
+	if(k>max)
+		max = k;
+	return max;
+}
+ void getPathInfo(TreeNode *node,int& sps,int& ps){
+     int val = node->val;
+     int sps1,sps2,ps1,ps2;
+     if(node->left == NULL && node->right==NULL){
+         sps = val>0 ? val : 0;
+         ps  = val;    
+         return;
+     }
+    sps = 0;
+    ps  = val;
+	if(node->left != NULL){
+		getPathInfo(node->left,sps1,ps1);
+        sps = getMax(sps,sps1+val);
+        ps  = getMax(ps,ps1,sps1+val);
+	}
+
+	if(node->right!=NULL){
+		getPathInfo(node->right,sps2,ps2);
+        sps = getMax(sps,sps2+val);
+        ps  = getMax(ps, ps2,sps2+val);
+	}
+    
+    if(node->left !=NULL && node->right!=NULL){
+        ps = getMax(ps,sps1+val+sps2);
+    }
+
+}
+    int maxPathSum(TreeNode *root) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+    int val = root->val;
+
+    
+    int sps,ps,sps1,sps2,ps1,ps2;
+     if(root->left == NULL && root->right==NULL){
+         sps = val>0 ? val : 0;
+         ps  = val;    
+         return ps;
+     }
+    
+    sps = 0;
+    ps = val;
+	if(root->left != NULL){
+		getPathInfo(root->left,sps1,ps1);  
+        ps  = getMax(ps,ps1,sps1+val);
+	}
+ 
+	if(root->right!=NULL){
+		getPathInfo(root->right,sps2,ps2);
+        ps  = getMax(ps, ps2,sps2+val);
+	}
+    
+     if(root->left !=NULL && root->right!=NULL){
+        ps = getMax(ps,sps1+val+sps2);
+    }
+	return ps;
+    }
+};
+
