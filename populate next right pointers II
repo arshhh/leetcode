@@ -1,0 +1,57 @@
+/*
+
+It takes me much time to fix the bug. The error is very common. I forget the update the states of variables 
+in next iteration.
+
+
+*/
+
+/**
+ * Definition for binary tree with next pointer.
+ * struct TreeLinkNode {
+ *  int val;
+ *  TreeLinkNode *left, *right, *next;
+ *  TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeLinkNode* getLeftMost(TreeLinkNode* tmp){
+    TreeLinkNode* node = tmp;
+	while(node!=NULL){
+		if(node->left!=NULL)
+			return node->left;
+		if(node->right!=NULL)
+			return node->right;
+		node = node->next;
+	}
+	return NULL;
+}
+    void connect(TreeLinkNode *root) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        TreeLinkNode* tmp = root;
+	TreeLinkNode* left = getLeftMost(tmp);
+	while(left!=NULL){
+		//move tmp from left to right
+		while(tmp!=NULL){
+			if(tmp->left!=NULL && tmp->right!=NULL){
+				tmp->left->next=tmp->right;
+                tmp->right->next = getLeftMost(tmp->next);           
+			}
+			else if(tmp->left!=NULL){
+				tmp->left->next= getLeftMost(tmp->next);
+			}
+			else if(tmp->right!=NULL){
+				tmp->right->next = getLeftMost(tmp->next);
+			}
+			tmp = tmp->next;
+		}
+        
+		tmp = left;
+        left = getLeftMost(tmp);
+	}
+    
+    }
+};
+
