@@ -1,0 +1,24 @@
+/*
+The first error is due to the 1 index problem. 
+
+*/
+
+class Solution {
+public:
+    vector<int> getRow(int rowIndex) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+            vector<int> result(rowIndex+1);
+	result.at(0) = 1;
+    	for(int i = 1;i<rowIndex+1;i++){
+		int previous = result.at(0);
+		for(int j = 1; j< i;j++){
+			int tmp = result.at(j);
+			result.at(j) += previous;
+			previous = tmp;
+		}
+		result.at(i) = 1;
+	}
+	return result;
+    }
+};
