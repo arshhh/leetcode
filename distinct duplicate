@@ -1,0 +1,36 @@
+/* this version can't pass the large test cases since the recrusive does a lot of duplicate computations,
+  so I think I need to build a table to store the previous computation results. 
+
+*/
+
+class Solution {
+public:
+    int numDistinct(string S, string T) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        if(S.size()<T.size())
+    return 0;
+    if( S.size() == T.size() ){
+        if( S.compare(T) == 0 )
+		    return 1;
+    	return 0;
+    }
+    if(T.size()==0)
+        return 1;
+    int j = S.size() - T.size();
+    for(int i=0;i<S.size();i++){
+	if(S[i] != T[0]){
+		j--;
+		if(j<0)
+			return 0;
+	}
+	else{
+	 	return numDistinct(S.substr(i+1),T.substr(1))+numDistinct(S.substr(i+1),T);	
+}
+	}
+        
+    }
+};
+
+
+
