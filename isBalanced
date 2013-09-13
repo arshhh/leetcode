@@ -1,0 +1,56 @@
+/*
+
+The error happens when I forgot to initialize the value of variables!!! This should be avoided
+
+
+*/
+
+
+
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+   int getDepth(TreeNode *root){
+    if(root==NULL)
+	 	return 0;
+	if(root->left==NULL && root->right == NULL)	
+		return 1;
+	int depth1=0;
+    int depth2=0;
+	if(root->left!=NULL)
+		depth1 = 1+getDepth(root->left);
+	if(root->right!=NULL)
+		depth2 = 1 + getDepth(root->right);
+	return depth1 > depth2 ? depth1 : depth2;
+}	
+	int abs(int i){
+		return i>0 ? i : 0-i ;
+	}
+    bool isBalanced(TreeNode *root) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+   	 if(root==NULL)
+		return true;
+	int depth1= getDepth(root->left);
+	int depth2 = getDepth(root->right);
+	if(depth1<2 && depth2<2)
+		return true;
+	int diff = abs(depth1-depth2);
+	if(diff >1 )
+		return false;
+	if(isBalanced(root->left) && isBalanced(root->right) ){
+			return true;	
+	}
+	return false;
+            }
+};
+
+
