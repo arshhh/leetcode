@@ -1,0 +1,50 @@
+/*
+
+I though I may not pass the large tests while it passed. But I am not sure if my method is the best one. Do you think 
+we can use DP here?
+
+*/
+
+
+class Solution {
+public:
+    bool isPalindrome(string s,int i, int j){
+		while(j>i){
+			if(s[j] == s[i]){
+				i++;
+				j--;
+			}
+else{
+	return false;
+}	
+		}
+		return true;
+	}
+    vector<vector<string>> partition(string s) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+     	vector<vector<string> > result;
+         int size = s.size();
+if(size == 0)
+return result;
+if(isPalindrome(s,0,size-1)){
+	vector<string> tmp;
+	tmp.push_back(s);
+	result.push_back(tmp);
+}
+	for(int i=size-2;i>-1;i--){
+		if(isPalindrome(s,0,i)){
+		  	string p1 = s.substr(0,i+1);
+			string p2 = s.substr(i+1);
+			vector<vector<string> > tmp = partition(p2);
+			for(int j=0;j<tmp.size();j++){
+				vector<string> v = tmp[j];
+				v.insert(v.begin(),p1);
+				result.push_back(v);
+			}
+		}
+	}
+return result;   
+    }
+};
+
