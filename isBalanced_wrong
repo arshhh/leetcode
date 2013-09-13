@@ -1,0 +1,49 @@
+/*
+
+This version is wrong, because the concept of balanced tree is misunderstaned by me
+
+*/
+
+
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+
+    bool isBalanced(TreeNode *root) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+	if(root==NULL)
+		return true;
+        	bool check = false;
+	vector<TreeNode*> v;
+	v.push_back(root);
+	while(!check){
+		vector<TreeNode*> tmp;
+		for(int i=0;i<v.size();i++){
+			TreeNode* node = v.at(i);
+			if(node->left == NULL || node->right == NULL)
+				check = true;
+			if(node->left!=NULL)
+				tmp.push_back(node->left);
+			if(node->right!=NULL)
+				tmp.push_back(node->right);
+		}
+		v=tmp;
+	}
+	for(int j=0;j<v.size();j++){
+		TreeNode* node = v.at(j);
+		if(node->left!=NULL || node->right!=NULL)
+			return false;
+	}
+	return true;
+    }
+};
+
