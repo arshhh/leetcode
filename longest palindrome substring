@@ -1,0 +1,48 @@
+/* 
+
+can't pass the large tests
+
+*/
+
+
+class Solution {
+public:
+
+    bool isPalindrome(string s,int i, int j){
+    	while(j>i){
+			if(s[j] == s[i]){
+				i++;
+				j--;
+			}
+else{
+				return false;
+}	
+		}
+		return true;
+	}
+
+    string longestPalindrome(string s) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        int size = s.size();
+	if(size<2)
+		return s;
+	int i=0;
+	string result = s.substr(i,1);
+	for(int i=0;i<size;i++){
+		for(int j=size-1;j>i;j--){
+			if(result.size()>=(size-i))
+				return result;
+			if(isPalindrome(s,i,j)){
+				int length = j-i+1;
+				if(length>result.size()){
+					result = s.substr(i,length);
+				}
+				break;
+			}
+		}	
+	}
+	return result;
+    }
+};
+
