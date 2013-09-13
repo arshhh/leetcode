@@ -1,0 +1,39 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int minDepth(TreeNode *root) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        if(root == NULL)
+    return 0;
+       vector<TreeNode*> v;
+	int depth = 1;
+      v.push_back(root);
+	while(v.size()>0){
+		vector<TreeNode*> tmp;
+		for(int i=0;i<v.size();i++){
+			TreeNode* node = v.at(i);
+			if(node->left==NULL && node->right == NULL)
+				return depth;
+			else{
+				if(node->left!=NULL)
+					tmp.push_back(node->left);
+				if(node->right!=NULL)
+					tmp.push_back(node->right);	
+				}
+		}
+		v=tmp;
+		depth++;
+	}
+
+    }
+};
+
