@@ -1,0 +1,72 @@
+/*
+
+I made a mistake when operate the pointer. 
+
+*/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* getListNode(int i,ListNode* head){
+		ListNode* tmp=head;
+		while(i>0){
+			tmp=tmp->next;
+			i--;
+		}
+		return tmp;
+	}
+	int getLength(ListNode* head){
+		int length = 0;
+		ListNode* tmp = head;
+		while(tmp!=NULL){
+			length++;
+			tmp=tmp->next;
+		}
+		return length;
+	}
+    TreeNode *sortedListToBST(ListNode *head) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+       	 int length = getLength(head);
+	if(length == 0)
+		return NULL;
+	if(length == 1){
+		TreeNode* node = new TreeNode(head->val);
+		return node;
+	}
+	if(length == 2){
+		TreeNode* root= new TreeNode(head->val);
+		TreeNode* right = new TreeNode(head->next->val);
+		root->right = right;
+		return root;
+	}
+	int rootIndex = length/2;
+	ListNode* preRoot = getListNode(rootIndex-1,head);
+	ListNode* root = preRoot->next;
+	ListNode* right = root->next;
+	preRoot->next=NULL;
+	ListNode* left = head;
+	//build tree
+	TreeNode* treeRoot = new TreeNode(root->val);
+	treeRoot->left = sortedListToBST(left);
+	treeRoot->right=sortedListToBST(right);
+	return treeRoot;
+    }
+};
+
