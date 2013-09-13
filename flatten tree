@@ -11,7 +11,7 @@ class Solution {
 public:
    TreeNode* getLeaf(TreeNode* root){
 	TreeNode* tmp = root;
-	while(tmp>right!=NULL)
+	while(tmp->right!=NULL)
 		tmp=tmp->right;
 	return tmp;
 }
