@@ -1,0 +1,42 @@
+class Solution {
+public:
+
+    string intToStr(int n){
+		stringstream ss;
+		ss<<n;
+		return ss.str();
+	}
+    string addBinary(string a, string b) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        string res="";
+        if(a.size()>b.size()){
+            int n=a.size()-b.size();
+            string s(n,'0');
+            b=s+b;
+        }else if(a.size()<b.size()){
+            int n=b.size()-a.size();
+            string s(n,'0');
+            a=s+a;
+        }
+        
+	int size=a.size();
+	int carry = 0;
+	for(int i=size-1;i>-1;i--){
+		int val1 = a[i]-'0';
+		int val2 = b[i]-'0';
+		int tmp = val1+val2+carry;
+		if(tmp>1){
+			carry=1;
+			tmp -=2;
+		}else{
+			carry=0;
+        }	
+		res= intToStr(tmp)+res;
+	}
+	if(carry==1)
+		res= "1"+res;
+	return res;
+    }
+};
+
