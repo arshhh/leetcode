@@ -1,0 +1,75 @@
+/* 
+This version in my opinion is correct even though It can't pass the tests. Because for sukodu, there are many different 
+solutions.
+
+
+*/
+
+
+
+class Solution {
+public:
+    vector<char> getChoices(vector<vector<char> > &board,int i,int j,int n){
+		vector<char> result;
+        bool* table = new bool[n];
+		for(int k=0;k<n;k++)
+			table[k]=true;
+		for(int k=0;k<n;k++){
+			if(board[i][k]!='.')
+				table[board[i][k]-'1']=false;
+			if(board[k][j]!='.')
+				table[board[k][j]-'1']=false;
+		}
+		for(int k=0;k<n;k++){
+			if(table[k])
+				result.push_back('1'+k);
+		}
+		return result;
+	}
+    
+    vector<char> getOptimalPos(vector<vector<char> > &board,int &row,int &col,int n){
+        int min = n+1;
+        vector<char> choices;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(board[i][j] == '.'){
+                    vector<char> tmp = getChoices(board,i,j,n);
+                    if(tmp.size()<min){
+                        min = tmp.size();
+                        choices = tmp;
+                        row=i;
+                        col=j;
+                    }
+                }
+                
+            }
+            
+        }
+        return choices;      
+    }
+bool solve(vector<vector<char> > &board,int n){
+    int row=0;
+    int col=0;
+    vector<char> choices = getOptimalPos(board,row,col,n);
+    if(choices.size()==0)
+        return true;
+    for(int k=0;k<choices.size();k++){
+    	vector<vector<char> > newBoard=board;
+		newBoard[row][col]=choices[k];
+		if(solve(newBoard,n)){
+			board=newBoard;
+			return true;
+		}
+	}  
+    return false;
+}	
+    void solveSudoku(vector<vector<char> > &board) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        int n = board.size();
+	solve(board,n);
+    }
+};
+
+
+
