@@ -1,0 +1,43 @@
+class Solution {
+public:
+    bool search(vector<vector<char> > &board,string word,int row,int col,int nRow,int nCol){
+		if(word[0]!=board[row][col])
+			return false;
+        if(word.size()==1)
+            return true;
+		char tmp = board[row][col];
+		board[row][col]='0';
+		if(col+1<nCol && board[row][col+1]!='0' && search(board,word.substr(1),row,col+1,nRow,nCol) )
+			return true;
+		if(col-1>-1 && board[row][col-1]!='0' &&
+search(board,word.substr(1),row,col-1,nRow,nCol) )
+			return true;
+		if(row-1>-1 && board[row-1][col]!='0' &&
+search(board,word.substr(1),row-1,col,nRow,nCol) )
+			return true;
+if(row+1<nRow && board[row+1][col]!='0' &&
+search(board,word.substr(1),row+1,col,nRow,nCol) )
+			return true;
+		board[row][col] = tmp;
+		return false;
+	}
+    
+    bool exist(vector<vector<char> > &board, string word) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+	if(word.size()==0)
+		return true;
+    int nRow=board.size();
+	if(nRow==0)
+		return false;
+	int nCol = board[0].size();
+	for(int i =0;i<nRow;i++){
+		for(int j=0;j<nCol;j++){
+			if(search(board,word,i,j,nRow,nCol))
+				return true;
+		}	
+    }
+return false; 
+    }
+};
+
