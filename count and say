@@ -1,0 +1,36 @@
+class Solution {
+public:
+
+    string intToStr(int n){
+        stringstream ss;
+        ss<<n;
+    	return ss.str();
+	}
+    
+    string countAndSay(int n) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+
+	string res="1";
+	while(n>1){  
+		int size=res.size();
+		int count=1;
+		char c = res[0];
+		string tmp="";
+		for(int i=1;i<size;i++){
+			if(res[i]==c){
+				count++;
+			}
+			else{
+				tmp += ( intToStr(count) + c );
+				c = res[i];
+				count=1;
+			}
+		}
+		tmp += ( intToStr(count) + c );
+        n--;    
+	}
+	return res;
+    }
+};
+
