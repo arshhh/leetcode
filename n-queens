@@ -1,0 +1,74 @@
+/*
+
+I spend a lot of time to debug in this problem. So disapointing. This problem is a famous problem. And there are many
+excellent implementations. I just use the simplest one.
+
+*/
+
+
+
+class Solution {
+public:
+
+    void solve(int row,int n,vector<vector<string> > &result,vector<string> ans,bool* table){
+    for(int i=0;i<n;i++){
+		if(table[row*n+i]){
+			string s = genStr(i,n);
+			vector<string> nAns = ans;
+			nAns.push_back(s);
+			if(row == n-1){
+				result.push_back(nAns);
+				return;
+			}
+			else{
+				bool* nTable = copyTable(table,n*n);
+				mark(nTable,row,i,n);
+				solve(row+1,n,result,nAns,nTable);
+			}
+		}
+	}
+        return;
+	}
+
+void mark(bool* table,int row,int col,int n){
+	for(int i=1;row+i<n;i++){
+		table[(row+i)*n+col] = false;
+	//	table[n*row+i] = false;
+		if(col+i<n)
+			table[(row+i)*n+col+i]=false;
+		if(col-i>-1)
+			table[(row+i)*n+col-i]=false;
+	}
+}
+string genStr(int i,int n){
+	string s(n,'.');
+	s[i]='Q';
+	return s;	
+}
+bool* copyTable(bool* table,int n){
+	bool* res = new bool[n];
+	for(int i=0;i<n;i++)
+		res[i] = table[i];
+	return res;
+}
+void initTable(bool* table,int n){
+	for(int i=0;i<n;i++)
+		table[i]=true;
+}
+    vector<vector<string> > solveNQueens(int n) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        
+	// if true, means can place a queen
+    vector<vector<string> > result;
+    if(n==2)
+            return result;
+    bool* table = new bool[n*n];
+	initTable(table,n*n);
+
+	vector<string> ans;
+	solve(0,n,result,ans,table);
+    return result;
+    }
+};
+
