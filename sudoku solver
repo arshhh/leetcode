@@ -1,6 +1,7 @@
-/* 
-This version in my opinion is correct even though It can't pass the tests. Because for sukodu, there are many different 
-solutions.
+/*
+
+I find the optimal position every time.BUt I don't know if it's faster!
+
 
 
 */
@@ -10,8 +11,8 @@ solutions.
 class Solution {
 public:
     vector<char> getChoices(vector<vector<char> > &board,int i,int j,int n){
-		vector<char> result;
-        bool* table = new bool[n];
+        vector<char> result;
+        		bool* table = new bool[n];
 		for(int k=0;k<n;k++)
 			table[k]=true;
 		for(int k=0;k<n;k++){
@@ -20,6 +21,14 @@ public:
 			if(board[k][j]!='.')
 				table[board[k][j]-'1']=false;
 		}
+		int ii=i/3*3;
+		int jj=j/3*3;
+		for(int k=0;k<3;k++)
+			for(int l=0;l<3;l++){
+				if(board[ii+k][jj+l]!='.'){
+					table[board[ii+k][jj+l]-'1']=false;
+				}
+			}
 		for(int k=0;k<n;k++){
 			if(table[k])
 				result.push_back('1'+k);
@@ -34,6 +43,12 @@ public:
             for(int j=0;j<n;j++){
                 if(board[i][j] == '.'){
                     vector<char> tmp = getChoices(board,i,j,n);
+                    if(tmp.size() == 0){
+                        row=-1;
+                        col=-1;
+                        return choices;
+                    }
+                        
                     if(tmp.size()<min){
                         min = tmp.size();
                         choices = tmp;
@@ -51,14 +66,16 @@ bool solve(vector<vector<char> > &board,int n){
     int row=0;
     int col=0;
     vector<char> choices = getOptimalPos(board,row,col,n);
+    if(row==-1)
+        return false;
     if(choices.size()==0)
         return true;
     for(int k=0;k<choices.size();k++){
-    	vector<vector<char> > newBoard=board;
-		newBoard[row][col]=choices[k];
-		if(solve(newBoard,n)){
-			board=newBoard;
+    		board[row][col]=choices[k];
+		if(solve(board,n)){
 			return true;
+		}else{
+			board[row][col]='.';
 		}
 	}  
     return false;
