@@ -1,0 +1,63 @@
+class Solution {
+public:
+    void init(bool* table,int size){
+		for(int i=0;i<size;i++)
+			table[i]=true;
+	}
+    int largestRectangleArea(vector<int> &height) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        int size = height.size();
+	if(size==0)
+		return 0;
+	if(size == 1)
+		return height[0];
+	bool* valid = new bool[size];
+	init(valid,size);
+	int max=0;
+	for(int i=0;i<size;i++){
+		if(!valid[i])
+			continue;
+        
+		//store the current lowest height
+		int h=height[i];
+		int w=0;
+        if(h<=max/(size-i)){
+            for(int j=i+1;j<size;j++)
+                if(height[j]<=h)
+                    valid[j]=false;
+            continue;       
+        }         
+        //k is the right index of the max rectangle
+        int k=i;
+        //hh is the height in the maximum recrangle
+        int hh=h;
+		for(int j=i;j<size;j++){
+			w++;
+            
+            
+            
+            
+            
+            
+            
+			if(height[j]<h)
+		 		h=height[j];
+			if(w*h>max){
+				max=w*h;
+                k=j;
+                hh=h;
+			}
+            if(h<=max/(size-i))
+                break;
+		}
+		//mark the invalid col
+		for(int j=i+1;j<k;j++){
+			if(height[j]==hh)
+				valid[j]=false;
+		}
+	}
+	return max;
+    }
+};
+
