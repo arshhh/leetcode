@@ -28,6 +28,7 @@ public:
 			}
 		}
 		tmp += ( intToStr(count) + c );
+        res= tmp;
         n--;    
 	}
 	return res;
