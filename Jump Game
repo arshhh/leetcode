@@ -1,0 +1,41 @@
+class Solution {
+public:
+    bool canJump(int A[],int pos,int n,bool* table){
+    int step = A[pos];
+	for(int i=step;i>=1;i--){
+		if(pos+i>=n-1){
+			return true;
+		}
+		if(table[pos+i]==false){
+			continue;
+		}
+		else{
+			bool res = canJump(A,pos+i,n,table);
+			if(res==true)
+				return true;
+			table[pos+i]=false;	
+		}
+	}
+	table[pos] = false;
+	return false;
+	}
+void init(bool* table,int n){
+	for(int i=0;i<n;i++)
+		table[i]=true;
+}
+    bool canJump(int A[], int n) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+	//DP table
+	if(n==0)
+		return false;
+        if(n==1)
+	return true;
+	// false means can't jump on that position, we don't need true information
+	bool* table = new bool[n];
+	init(table,n);
+	//n >=2
+return canJump(A,0,n,table);
+    }
+};
+
