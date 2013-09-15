@@ -1,3 +1,12 @@
+/*
+
+This version can pass the large tests, since I add delete condition in it. if A[pos+i]+pos+i <= A[pos+step]+pos+step,
+then it must can't reach the end.
+
+
+*/
+
+
 class Solution {
 public:
     bool canJump(int A[],int pos,int n,bool* table){
@@ -10,10 +19,15 @@ public:
 			continue;
 		}
 		else{
-			bool res = canJump(A,pos+i,n,table);
-			if(res==true)
+            if(i<step && pos+i+A[pos+i]<=pos+step+A[pos+step]){
+                table[pos+i]=false;
+            }
+            else{     
+		    	bool res = canJump(A,pos+i,n,table);
+		    	    if(res==true)
 				return true;
-			table[pos+i]=false;	
+    			table[pos+i]=false;	
+            }
 		}
 	}
 	table[pos] = false;
