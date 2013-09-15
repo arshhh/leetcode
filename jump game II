@@ -1,0 +1,42 @@
+class Solution {
+public:
+    void init(int* table,int n){
+		for(int i=0;i<n;i++)
+			table[i]=-1;
+	}
+	int min(int i,int j){
+		return i<j ? i : j;
+	}
+    int jump(int A[], int n) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        if(n<=1)
+	return 0;
+	int* minSteps = new int[n];
+	init(minSteps,n);
+	minSteps[n-1]=0;
+	for(int i=n-2;i>-1;i--){
+		int step = A[i];
+		if(i+step>=n-1)
+			minSteps[i]=1;
+		else{	
+			//find the miniumn step for i 
+			for(int j=i+step;j>i;j--){
+				if(minSteps[j]!=-1){
+					if(minSteps[j]==1){
+						minSteps[i] = 2;
+						break;
+					}
+					if(minSteps[i]==-1)
+						minSteps[i] = 1+minSteps[j];
+					else{
+						minSteps[i] = min(minSteps[i],1+minSteps[j]);
+					}	
+				}
+			}
+		}
+	}
+	return minSteps[0];
+    }
+};
+
