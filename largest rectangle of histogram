@@ -34,13 +34,6 @@ public:
         int hh=h;
 		for(int j=i;j<size;j++){
 			w++;
-            
-            
-            
-            
-            
-            
-            
 			if(height[j]<h)
 		 		h=height[j];
 			if(w*h>max){
