@@ -1,0 +1,75 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int> > zigzagLevelOrder(TreeNode *root) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        vector<vector<int> > res;
+    if(root==NULL)
+		return res;
+	deque<TreeNode*> level;
+	bool rightToLeft = true;
+	level.push_back(root);
+	vector<int> item;
+	item.push_back(root->val);
+	res.push_back(item);
+	item.clear();
+	while(!level.empty()){
+		int size = level.size();
+		if(rightToLeft){
+			for(int i=size-1;i>-1;i--){
+				TreeNode* node = level[i];
+				if(node->right!=NULL){
+					level.push_back(node->right);
+					item.push_back(node->right->val);
+				}
+				if(node->left!=NULL){
+					level.push_back(node->left);
+					item.push_back(node->left->val);
+				}		
+			}
+            if(item.size()>0){
+		    	res.push_back(item);
+			    item.clear();
+            }
+			//delete the previous information in level
+			for(int i=0;i<size;i++)
+				level.pop_front();
+			rightToLeft = false;
+		}else{
+			//left to right
+			for(int i=size-1;i>-1;i--){
+				TreeNode* node = level[i];
+				if(node->left!=NULL){
+					level.push_back(node->left);
+					item.push_back(node->left->val);
+				}
+				if(node->right!=NULL){
+					level.push_back(node->right);
+					item.push_back(node->right->val);
+				}
+			}
+            if(item.size()>0){
+			    res.push_back(item);
+			    item.clear();
+            }
+			for(int i=0;i<size;i++)
+				level.pop_front();
+			rightToLeft = true;
+		}//else
+
+		}
+
+	return res;
+	
+    }
+};
+
