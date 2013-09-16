@@ -1,55 +1,51 @@
 class Solution {
 public:
-    void init(bool* table,int size){
-		for(int i=0;i<size;i++)
-			table[i]=true;
-	}
+void init(bool* t,int n){
+	for(int i=0;i<n;i++)
+		t[i]=true;
+}
     int largestRectangleArea(vector<int> &height) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
         int size = height.size();
 	if(size==0)
 		return 0;
-	if(size == 1)
+	if(size==1)
 		return height[0];
-	bool* valid = new bool[size];
-	init(valid,size);
+	//begin and end arraies indicate whether an item is a valid candidate for begin or end of the maximum rectangle
+	bool* begin = new bool[size];
+	bool* end = new bool[size];
+	init(begin,size);
+	init(end,size);
 	int max=0;
-	for(int i=0;i<size;i++){
-		if(!valid[i])
-			continue;
-        
-		//store the current lowest height
-		int h=height[i];
-		int w=0;
-        if(h<=max/(size-i)){
-            for(int j=i+1;j<size;j++)
-                if(height[j]<=h)
-                    valid[j]=false;
-            continue;       
-        }         
-        //k is the right index of the max rectangle
-        int k=i;
-        //hh is the height in the maximum recrangle
-        int hh=h;
-		for(int j=i;j<size;j++){
-			w++;
-			if(height[j]<h)
-		 		h=height[j];
-			if(w*h>max){
-				max=w*h;
-                k=j;
-                hh=h;
-			}
-            if(h<=max/(size-i))
-                break;
-		}
-		//mark the invalid col
-		for(int j=i+1;j<k;j++){
-			if(height[j]==hh)
-				valid[j]=false;
-		}
+	int w = 0 ;
+	int h =0;
+	for(int i=1;i<size;i++){
+		if(height[i]<=height[i-1])
+			begin[i]=false;
 	}
+	for(int j=size-2;j>-1;j--){
+		if(height[j]<=height[j+1])
+			end[j]=false;
+	}
+	for(int i=0;i<size;i++){
+		if(!begin[i])		
+			continue;
+		h=height[i];
+		w=1;
+		max = h*w;
+		for(int j=i+1;j<size;j++){
+			if(height[j]<h)
+				h=height[j];
+			w++;
+			if(!end[j])
+				continue;
+			else{
+				if(h> ((float)max/w) )
+					max = w*h;
+			}
+		}//inner for
+	}//outer for
 	return max;
     }
 };
