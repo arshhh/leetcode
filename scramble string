@@ -1,0 +1,90 @@
+class Solution {
+public:
+    //0~pos doesn’t need to consider it’s the same
+	bool hasSameChars(string s1, string s2,int& pos,int i,bool reverse){
+		int size=s1.size();
+		if(reverse){
+			int start = 0;
+			if(pos>-1){
+				start = pos+1;
+			}
+			for(int j=start;j<=i;j++){
+				bool found= false;
+				for(int k=size-1-start;k>=size-1-i;k++){
+					if(s1[j]==s2[k]){
+						found = true;
+						s2[k]='1';
+						break;
+					}
+				}
+				if(!found)
+					return false;
+			}
+			pos = i;
+			return true;
+		}
+		else{
+			int start = 0;
+			if(pos>-1){
+				start = pos+1;
+			}
+			for(int j=start;j<=i;j++){
+				bool found = false;
+				for(int k = start;k<=i;k++){
+					if(s1[j]==s2[k]){
+						s2[k]='1';
+						found = true;
+						break;
+					}
+				}
+				if(!found)
+					return false;
+
+			}
+			pos = i;
+			return true;
+		}
+	}
+    
+    bool isScramble(string s1, string s2) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+      	 int size1 = s1.size();
+	int size2 = s2.size();
+	if(size1!=size2)
+		return false;
+	if(size1==1){
+		if(s1[0] ==s2[0])
+			return true;
+		return false;
+	}
+	if(size1==2){
+		if( (s1[0]==s2[0]&&s1[1]==s2[1]) || (s1[0]==s2[1]&&s1[1]==s2[0]) )
+			return true;
+		return false;
+	}
+    int pos = -1;
+	//has the same characters
+	if(! hasSameChars(s1,s2,pos,size1-1,false) )
+		return false;
+	//s1 left part compares s2 left part
+	//the s1[0~pos] contains the same characters with s2[0~pos]
+	pos =-1;
+	//0~i is the left part, its length is i+1
+	for(int i=0;i<size1-1;i++){
+		if(hasSameChars(s1,s2,pos,i,false)){
+			if(isScramble(s1.substr(0,i+1),s2.substr(0,i+1)) &&
+				isScramble(s1.substr(i+1),s2.substr(i+1)) )
+				return true;		
+		}//if
+		//s1 0~i has the same chars as the s2 size-i-1~size-1
+		if(hasSameChars(s1,s2,pos,i,true)){
+			if(isScramble(s1.substr(0,i+1),s2.substr(size1-i-1)) &&
+				isScramble(s1.substr(i+1),s2.substr(0,size1-i-1)) )
+				return true;
+		}
+	}
+	return false;
+    }
+};
+
