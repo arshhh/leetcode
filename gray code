@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<int> grayCode(int n) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+    vector<int> res;
+//n ==1
+res.push_back(0);
+//tmp is the number we have processed
+int tmp=0;
+int size=1;
+while(n>tmp){
+	for(int i=size-1;i>-1;i--){
+		res.push_back(res[i]+size);
+	}
+	tmp++;
+	size*=2;
+}	
+return res;
+    }
+};
+
