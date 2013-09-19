@@ -1,39 +1,28 @@
 class Solution {
 public:
-vector<vector<int> > addOne(vector<vector<int> > v,int n){
-	for(int i=0;i<v.size();i++)
-		v[i].push_back(n);
-	return v;
-}
     vector<vector<int> > permute(vector<int> &num) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
         int size = num.size();
-	vector<vector<int> > res;
+    vector<vector<int> > res;
 	if(size==0)
 		return res;
-	//resTmp[i] stores the temp result which doesn’t contain num[i]
-	vector<vector<int> >* resTmp = new vector<vector<int> >[size];
-	for(int i=0;i<size-1;i++){
-		for(int j=0;j<size;j++){
-			int val = num[j];
-				for(int k=0;k<size;k++){
-					if(k!=j){
-						resTemp[j] = addOne(resTemp[k],num[k]);
-					}
-				}
-		}
-	}
 	for(int i=0;i<size;i++){
-		vector<vector<int> > tmp = resTemp[i];
-		int val = num[i];
-		for(int j=0;j<tmp.size();j++){
-			vector<int> t = tmp[j];
-			t.push_back(val);
-			res.push_back(t);
+		vector<int> tmp = num;
+		int val = tmp[i];
+		tmp.erase(tmp.begin()+i);
+		vector<vector<int> > res1 = permute(tmp);
+        if(res1.size() == 0){
+            vector<int> t;
+            t.push_back(val);
+            res.push_back(t);
+        }else{
+		    for(int j=0;j<res1.size();j++){
+		    	res1[j].push_back(val);
+		    	res.push_back(res1[j]);
 		}
-	}//for
+        }
+	}
 	return res;
     }
 };
-
