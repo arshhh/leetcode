@@ -1,0 +1,63 @@
+class Solution {
+public:
+void calcu(int* count,int n){
+    count[0] = 0;
+	count[1]=1;
+	for(int i=2;i<n;i++){
+		count[i] = i*count[i-1];
+	}
+}
+void swap(string& s,int i,int j){
+	char tmp = s[i];
+	s[i]=s[j];
+	s[j]=tmp;
+}
+
+void reverse(string& s,int start){
+    int n=s.size();
+    for(int i=start;i<(n+start)/2;i++){
+        swap(s,i,n-1-i+start);
+    }
+}
+    string getPermutation(int n, int k) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+       	string res="";
+	for(int i=1;i<=n;i++)
+		res += ('0'+i);
+
+    //count[i] stores that the maximum permutation for string with length n
+	int* count = new int[n+1];
+	calcu(count,n+1);
+	int i= n;
+	while(k>1){
+		for(;i>0;i--){
+			if(k>=count[i]){
+               
+                //the last element in the word,reverse
+                if(k == count[i]){
+                    reverse(res,n-i);
+                    return res;
+                }
+                //k>count[i]
+                 int start=n-1-i;
+                
+				int j = (k-1)/count[i]+start;
+				swap(res,start,j);
+                char tmp = res[j];
+                //
+                for(int l=j;l>start;l--)
+                    res[l]=res[l-1];
+                res[start+1] = tmp;
+			
+				k -= ( (k-1)/count[i]*count[i]);
+                i--;
+                break;
+			}
+		}
+		
+	}//while
+	return res;
+    }
+};
+
