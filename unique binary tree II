@@ -1,0 +1,68 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+
+
+    TreeNode* copy(TreeNode* root){
+		 if(root==NULL)
+			 return (TreeNode*)NULL;
+		 TreeNode* new_root=new TreeNode(root->val);
+		 new_root->left=copy(root->left);
+		 new_root->right=copy(root->right);
+		 return new_root;
+	 }
+     
+    void addDiff(TreeNode* root, int n){
+		if(root==NULL)
+			return;
+		root->val += n;
+		addDiff(root->left,n);
+		addDiff(root->right,n);
+	}
+	void addDiff(vector<TreeNode*> res,int n){
+		for(int i=0;i<res.size();i++){
+			TreeNode* root = res[i];
+			addDiff(root,n);
+		}
+
+	}
+    vector<TreeNode *> generateTrees(int n) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+	vector<TreeNode* > res;
+if(n==0){
+	res.push_back(NULL);
+	return res;
+}
+//root with i
+for(int i=1;i<=n;i++){
+	vector<TreeNode*> leftSet = generateTrees(i-1);
+	vector<TreeNode*> rightSet=generateTrees(n-i);
+	addDiff(rightSet,i);
+	for(int j=0;j<leftSet.size();j++){
+        
+		TreeNode* left = leftSet[j];
+        
+		for(int k=0;k<rightSet.size();k++){
+            
+			TreeNode* right=rightSet[k];
+            
+			TreeNode*  root = new TreeNode(i);
+			root->left=copy(left);
+			root->right=copy(right);
+			res.push_back(root);
+		}
+	}
+}
+return res; 
+    }
+};
+
