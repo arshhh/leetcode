@@ -1,0 +1,54 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    //root!=NULL
+	int getMax(TreeNode* root){
+		int max=0;
+		TreeNode* tmp=root;
+		while(tmp!=NULL){
+			max = tmp->val;
+			tmp=tmp->right;
+		}
+		return max;
+	}
+	int getMin(TreeNode* root){
+		int min=0;
+		TreeNode* tmp=root;
+		while(tmp!=NULL){
+			min=tmp->val;
+			tmp=tmp->left;
+		}
+		return min;
+	}
+
+    bool isValidBST(TreeNode *root) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        if(root==NULL)
+		return true;
+	if(isValidBST(root->left) && isValidBST(root->right)){
+		int val = root->val;
+		if(root->left!=NULL){
+			int max = getMax(root->left);
+			if(max>=val)
+			return false;
+		}
+		if(root->right!=NULL){
+			int min = getMin(root->right);
+			if(min<=val)
+				return false;
+		}
+		return true;
+	}
+	return false;
+    }
+};
+
