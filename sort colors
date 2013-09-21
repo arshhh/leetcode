@@ -1,29 +1,65 @@
 class Solution {
 public:
+    void swap(int A[],int i,int j){
+		int tmp=A[i];
+		A[i]=A[j];
+		A[j]=tmp;
+	}
     void sortColors(int A[], int n) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-        int n1=0;
-    int n2=0;
-	int n3=0;
-	for(int i=0;i<n;i++){
-		if(A[i]==0)
-			n1++;
-		else if(A[i]==1)
-			n2++;
-		else{
-			n3++;
+        //two index pointers
+	int k0=0;
+	int k2=n-1;
+	
+	while(A[k0]==0){
+		k0++;	
+	}
+	if(k0==n)
+		return;
+	while(A[k2]==2){
+		k2--;
+	}
+	if(k2==-1)
+		return;
+	// k0 is the first index of element which is not zero
+	//k2 is the last index of element which is not two
+	int i=k0;
+	int j=k2;
+	while(i<j){
+		if(A[i]==1 && A[j]==1){
+			i++;
+			continue;
 		}
-	}
-	for(int i=0;i<n;i++){
-		if(i<n1)
-			A[i]=0;
-		else if(i>=n1 && i<n1+n2)
-			A[i]=1;
-		else 
-			A[i]=2;
-
-	}
+		if(A[i]==2){
+			swap(A,i,k2);
+			if(j==k2)
+				j--;
+			k2--;
+			continue;
+		}else if(A[i]==0){
+			swap(A,i,k0);
+			if(i==k0)
+				i++;
+			k0++;
+			continue;
+		}
+		if(A[j]==2){
+			swap(A,j,k2);
+			if(j==k2)
+				j--;
+			k2--;
+			
+			continue;
+		}else if(A[j]==0){
+			swap(A,j,k0);
+			if(i==k0)
+				i++;
+			k0++;
+			continue;
+		}
+		
+	}//while
     }
 };
 
