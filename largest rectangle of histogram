@@ -1,7 +1,31 @@
 class Solution {
 public:
-void init(bool* t,int n){
-	for(int i=0;i<n;i++)
+
+    int* getMinHeight(vector<int> &height){
+        int n=height.size();
+    	int size = (n+1)*n/2;
+		int* minHeight = new int[size];
+        
+      
+         
+		for(int i=0;i<n;i++){
+			minHeight[i*n-(i-1)*i/2]=height[i];
+		}
+		//minHeight[i][j] = min(minHeight[i][j-1],j)
+		for(int i=2;i<=n;i++){
+			for(int k=0;k<n && k+i-1<n;k++){   
+				int index = k*n-(k-1)*k/2+(k+i-1)-k;
+				minHeight[index]= minHeight[index-1]<height[k+i-1]
+                ? minHeight[index-1]:
+                height[k+i-1];
+			
+			}
+		}
+		return minHeight;
+	}
+    
+	void init(bool* t,int n){
+    for(int i=0;i<n;i++)
 		t[i]=true;
 }
     int largestRectangleArea(vector<int> &height) {
@@ -15,8 +39,10 @@ void init(bool* t,int n){
 	//begin and end arraies indicate whether an item is a valid candidate for begin or end of the maximum rectangle
 	bool* begin = new bool[size];
 	bool* end = new bool[size];
-	init(begin,size);
-	init(end,size);
+	vector<int> begin_vector;
+	vector<int> end_vector;
+    init(begin,size);
+   init(end,size);
 	int max=0;
 	int w = 0 ;
 	int h =0;
@@ -24,25 +50,26 @@ void init(bool* t,int n){
 		if(height[i]<=height[i-1])
 			begin[i]=false;
 	}
-	for(int j=size-2;j>-1;j--){
-		if(height[j]<=height[j+1])
+    for(int j=size-2;j>-1;j--){
+    	if(height[j]<=height[j+1])
 			end[j]=false;
 	}
+   
+	int* minHeight = getMinHeight(height);
+
+	//build a vector to contain available ends
+
 	for(int i=0;i<size;i++){
 		if(!begin[i])		
 			continue;
-		h=height[i];
-		w=1;
-		max = h*w;
-		for(int j=i+1;j<size;j++){
-			if(height[j]<h)
-				h=height[j];
-			w++;
+		for(int j=i;j<size;j++){
 			if(!end[j])
 				continue;
 			else{
-				if(h> ((float)max/w) )
-					max = w*h;
+				int index = i*size-(i-1)*i/2+j-i;
+				h=minHeight[index];
+				w=j-i+1;
+				max = max>w*h ? max : w*h;
 			}
 		}//inner for
 	}//outer for
