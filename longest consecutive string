@@ -1,0 +1,47 @@
+#include<map>
+
+class Solution {
+public:
+    int longestConsecutive(vector<int> &num) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        unordered_map<int,int> map;
+    	 for(int i=0;i<num.size();i++){
+			map.insert(pair<int,int>(num[i],1)); 
+		}
+		unordered_map<int,int>::iterator iter,tmp;
+		for(iter=map.begin();iter!=map.end();iter++){
+			pair<int,int> val = *iter;
+			//has been visited
+			if(val.second==-1)
+				continue;
+			int v1=val.first+1;
+			int v2=val.first-1;
+			while(true){
+				tmp = map.find(v1);
+				if(tmp==map.end())
+					break;
+				iter->second +=1;
+				tmp->second = -1;
+				v1++;
+			}
+			while(true){
+				tmp=map.find(v2);
+				if(tmp==map.end())
+					break;
+				iter->second +=1;
+				tmp->second = -1;
+				v2--;
+			}
+		}//for
+		//check the maximum value
+		int max=1;
+		for(iter=map.begin();iter!=map.end();iter++){
+			if(iter->second>max){
+				max = iter->second;
+			}
+
+		}
+		return max;
+    }
+};
