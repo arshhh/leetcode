@@ -16,7 +16,12 @@ public:
 			}
 			return true;
 }
-
+	bool allVisit(bool* visited,int i,int j){
+		for(int k=i;k<=j;k++)
+			if(!visited[k])
+				return false;
+		return true;
+	}
     bool isScramble(string s1, string s2) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
@@ -25,21 +30,47 @@ public:
 			if(n1!=n2)
 				return false;
 		int n=n1;
+        if(n==0)
+            return true;
 		if(n==1){
 			if(s1[0]==s2[0])
 				return true;
 			return false;
 		}
+		//default false
+        int start = 0;
+		bool* visited = new bool[n]();
 		for(int i=0;i<n-1;i++){
-			if(hasSameChars(s1.substr(0,i+1),s2.substr(0,i+1)) &&
-            isScramble(s1.substr(0,i+1),s2.substr(0,i+1)) &&
-				isScramble(s1.substr(i+1),s2.substr(i+1)) )
-				return true;
-            if(hasSameChars(s1.substr(0,i+1),s2.substr(n-1-i)) &&
-                isScramble(s1.substr(0,i+1),s2.substr(n-1-i)) &&
-                isScramble(s1.substr(i+1),s2.substr(0,n-i-1)) )
-                return true;
-		}
+			for(int j=start;j<n;j++){
+				//check points
+				if(!visited[j] && s1[i]==s2[j]){
+					visited[j]=true;
+					if(j<=i && allVisit(visited,0,i) ){
+                        start = i+1;
+if(isScramble(s1.substr(0,i+1),s2.substr(0,i+1))&& isScramble(s1.substr(i+1),s2.substr(i+1)) )
+	return true;
+					}//if
+				}//if
+			}//inner for
+		}//outer for
+
+		//swap the string
+        start = 0;
+		visited = new bool[n]();
+		for(int i=n-1;i>0;i--){
+			for(int j=0;j<n;j++){
+				if(!visited[j] && s1[i]==s2[j]){
+					visited[j]=true;
+					if(j+1<=n-i && allVisit(visited,0,n-i-1) ){
+                        start = n-i-1;
+						if(isScramble(s1.substr(0,i),s2.substr(n-i)) &&
+						isScramble(s1.substr(i),s2.substr(0,n-i)) )
+							return true;
+                    }
+				}
+			}//inner for
+		}//for
 		return false;
     }
 };
+
