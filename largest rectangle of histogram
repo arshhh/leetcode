@@ -1,81 +1,32 @@
 class Solution {
 public:
-
-    int* getMinHeight(vector<int> &height){
-        int n=height.size();
-    	int size = (n+1)*n/2;
-		int* minHeight = new int[size];
-        
-      
-         
-		for(int i=0;i<n;i++){
-			minHeight[i*n-(i-1)*i/2]=height[i];
-		}
-		//minHeight[i][j] = min(minHeight[i][j-1],j)
-		for(int i=2;i<=n;i++){
-			for(int k=0;k<n && k+i-1<n;k++){   
-				int index = k*n-(k-1)*k/2+(k+i-1)-k;
-				minHeight[index]= minHeight[index-1]<height[k+i-1]
-                ? minHeight[index-1]:
-                height[k+i-1];
-			
-			}
-		}
-		return minHeight;
-	}
-    
-	void init(bool* t,int n){
-    for(int i=0;i<n;i++)
-		t[i]=true;
-}
     int largestRectangleArea(vector<int> &height) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-        int size = height.size();
-	if(size==0)
-		return 0;
-	if(size==1)
-		return height[0];
-	//begin and end arraies indicate whether an item is a valid candidate for begin or end of the maximum rectangle
-	vector<int> begin_vector;
-	vector<int> end_vector;
-
-	
-	int max=0;
-	int w = 0 ;
-	int h =0;
-		begin_vector.push_back(0);
-	for(int i=1;i<size;i++){
-		if(height[i]>height[i-1])
-			begin_vector.push_back(i);
-	}
-	
-	end_vector.push_back(size-1);
-    for(int j=size-2;j>-1;j--){
-    	if(height[j]>height[j+1])
-			end_vector.push_back(j);
-	}
-   
-	int* minHeight = getMinHeight(height);
-
-	//build a vector to contain available ends
-
-	for(int k=0;k<begin_vector.size();k++){
-		int i=begin_vector[k];
-		
-		for(int l=0;l<end_vector.size();l++){
-			int j=end_vector[l];
-			if(j<i)
-				break;
-			else{
-				int index = i*size-(i-1)*i/2+j-i;
-				h=minHeight[index];
-				w=j-i+1;
-				max = max>w*h ? max : w*h;
+        int n=height.size();
+        if(n==0)
+            return 0;
+        //dummy zero
+        height.push_back(0);
+        stack<int> s;
+        int max=0;
+        //traverse the vector, find every rectangle with height[i] as the minimum bar
+    for(int i=0;i<height.size();i++){
+		if( s.empty() || height[i]>=height[s.top()])
+			s.push(i);
+		else{
+			while(!s.empty() && height[s.top()]>height[i]){
+				int h = height[s.top()];
+				s.pop();
+				int w = s.empty() ? i : i-s.top()-1;
+				max = max > h*w ? max : w*h;
 			}
-		}//inner for
-	}//outer for
+            s.push(i);
+		}
+	
+	
+	}//for
 	return max;
+        
     }
 };
-
