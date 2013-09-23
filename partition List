@@ -1,0 +1,50 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *partition(ListNode *head, int x) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        if(head==NULL)
+            return head;
+        ListNode* iter=head;
+    	//pos->next->val >=x
+		ListNode* pos=NULL;
+        //find the first iter whose value is greate or euqal to x
+        while(iter!=NULL){
+            if(iter->val<x){
+                pos=iter;
+                iter=iter->next;
+            }else{
+                break;
+            }
+            
+        }
+            
+		while(iter!=NULL && iter->next!=NULL){
+			if(iter->next->val<x){
+				ListNode* next=iter->next;
+                iter->next=iter->next->next;
+				if(pos==NULL){
+					//insert at head			
+					next->next=head;
+					head=next;
+					pos=next;
+				}else{
+					next->next=pos->next;
+					pos->next=next;
+					pos=next;
+				}
+			}else{
+			    iter=iter->next;
+			}
+		}//while
+	return head;
+    }
+};
