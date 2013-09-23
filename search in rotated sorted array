@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int search(int A[],int start,int end,int target){
+        while(start<=end){
+          int mid = (start+end)/2;
+          if(A[mid]==target)
+            return mid;
+          else if( A[mid]<target){
+              start=mid+1;
+          }else{
+              end=mid-1;
+          }
+        }
+        return -1;
+    
+    }
+    int search(int A[], int n, int target) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        //find the exceptional point 
+        int pivot;
+        for(int i=0;i<n-1;i++){
+          if(A[i]>A[i+1]){
+            pivot=i;
+            break;
+            }
+        }
+        
+        
+                if(pivot==-1){
+            
+            return search(A,0,n-1,target);
+        }
+        
+        
+        //search between [0,pivot], [pivot,n-1] using binary search
+        int index = search(A,0,pivot,target);
+        if(index!=-1)
+          return index;
+        index = search(A,pivot+1,n-1,target);
+        if(index!=-1)
+          return index;
+        return -1;
+        
+    }
+};
