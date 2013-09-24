@@ -1,0 +1,33 @@
+
+//the array can contain duplicate elements
+
+class Solution {
+public:
+    int firstMissingPositive(int A[], int n) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        if(n==0)
+          return 1;
+        int max=0;
+        int sum=0;
+        unordered_set<int> set;
+        unordered_set<int>::iterator iter;
+        for(int i=0;<n;i++){
+          if(A[i]>0){
+            //detect duplicates
+            iter=set.find(A[i]);
+            if(iter!=set.end())
+              continue;
+            set.insert(A[i]);
+            sum+=A[i];
+            max = max > A[i] ? max : A[i];
+          }
+            
+        
+        }
+        if(max==0)
+          return 1;
+        int real_sum=(max+1)*max/2;
+        return real_sum==sum? max+1 ? real_sum-sum;
+    }
+};
