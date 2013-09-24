@@ -9,25 +9,31 @@ public:
         if(n==0)
           return 1;
         int max=0;
+        int min=numeric_limits<int>::max();
         int sum=0;
         unordered_set<int> set;
         unordered_set<int>::iterator iter;
-        for(int i=0;<n;i++){
+        for(int i=0;i<n;i++){
           if(A[i]>0){
             //detect duplicates
             iter=set.find(A[i]);
             if(iter!=set.end())
-              continue;
+              continue;        
             set.insert(A[i]);
-            sum+=A[i];
+         
             max = max > A[i] ? max : A[i];
-          }
-            
-        
+       
+          }       
         }
-        if(max==0)
+         if(max==0)
           return 1;
-        int real_sum=(max+1)*max/2;
-        return real_sum==sum? max+1 ? real_sum-sum;
+        for(int i=1;i<=max;i++){
+            iter=set.find(i);
+            if(iter==set.end())
+                return i;
+        }
+        
+        return max+1;
+
     }
 };
