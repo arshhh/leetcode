@@ -1,7 +1,7 @@
 class Solution {
 public:
-          int findMinIndex(vector<int> &prices, int startIndex,int endIndex){
-    int minIndex = startIndex;
+    int findMinIndex(vector<int> &prices, int startIndex,int endIndex){
+    	int minIndex = startIndex;
 	for(int i=startIndex+1;i<=endIndex;i++){
 		if(prices[i]<prices[minIndex])
 			minIndex = i;
@@ -14,38 +14,32 @@ public:
 	for(int i=startIndex+1;i<=endIndex;i++){
 		if(prices[i] >prices[maxIndex])
 			maxIndex = i;
-    }
+    	}
 	return maxIndex;
     }
-int getMax(int i,int j){
-	return i >j ? i : j;
-}
-   int getProfit(vector<int> &prices,int startIndex,int endIndex) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-if(startIndex>endIndex)
-return 0;
-
-    for(int i=startIndex+1;i<=endIndex;i++){
-        if(prices.at(i)<prices.at(startIndex))
-            startIndex = i;
-        else
-            break;
-    }
-    int minIndex = findMinIndex(prices, startIndex,endIndex);
-	int maxIndex = findMaxIndex(prices,startIndex,endIndex);
-	int profit = 0;
-	while(minIndex>maxIndex){
-		int tempMinIndex = 0 ;
-		if(maxIndex>startIndex){
-           			 tempMinIndex = findMinIndex(prices,startIndex,maxIndex-1);
-			profit = getMax(profit, prices.at(maxIndex)-prices.at(tempMinIndex));
+	int getMax(int i,int j){
+		return i >j ? i : j;
+	}
+	//get the maximum profit between startIndex and endIndex of prices if if you have only one change to trade
+	//you shoud use dynamic programmming to address this problem, store and update the minimum price between
+	//[i,j]
+	//max[i,j] = prices[j]-min[i,j-1] > max[i,j-1] ? price...... : max[i,j-1]
+   	int getProfit(vector<int> &prices,int startIndex,int endIndex) {
+	 // Start typing your C/C++ solution below
+	 // DO NOT write int main() function
+	if(startIndex>endIndex)
+		return 0;
+	int min=prices[startIndex];
+	max =0;
+	for(int i=startIndex+1;i<=endIndex;i++){
+		if(prices[i]-min>max){
+			max = prices[i]-min;
 		}
-		startIndex = maxIndex + 1;
-		maxIndex = findMaxIndex(prices,startIndex,endIndex);
-}
-profit = getMax(profit, prices.at(maxIndex)-prices.at(minIndex));
-return profit;
+		//update min
+		if(prices[i]<min)
+			min=prices[i];
+	}
+	return max;
 }
 
     int maxProfit(vector<int> &prices) {
