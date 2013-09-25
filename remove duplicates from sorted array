@@ -1,0 +1,29 @@
+class Solution {
+public:
+
+    void moveForward(int A[],int start,int end){
+		for(int i=start;i<=end;i++)
+			A[i-1]=A[i];
+	}
+    int removeDuplicates(int A[], int n) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        if(n==0)
+	return 0;
+	int pre=A[0];
+      	for(int i=1;i<n;){
+		if(A[i]==pre){
+			//move the array from i+1 forward
+			moveForward(A,i+1,n-1);
+			n--;
+			continue;	
+		}
+		else{
+			pre=A[i];
+			i++;
+		}
+	}
+	return n;
+    }
+};
+
