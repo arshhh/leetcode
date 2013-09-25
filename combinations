@@ -1,0 +1,35 @@
+class Solution {
+public:
+
+
+// 1 2 .. k k+1 k+2 k+3
+    //recursive, digits==n stops digits starts at 0
+	void generate(vector<vector<int> >& res,
+int digits,vector<int> set,int n,int k){
+		if(digits==k){
+			res.push_back(set);
+			return;
+		}
+		int pre=0;
+		if(digits!=0)
+			pre=set.back();
+		for(int i=pre+1;i<=n;i++){
+			vector<int> new_set(set);
+			new_set.push_back(i);
+			generate(res,digits+1,new_set,n,k);
+		}
+		return;
+	}
+    vector<vector<int> > combine(int n, int k) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        //return k number from 1,2,....n
+	//pre indicates the previous value
+	int pre=0;
+	vector<vector<int> > res;
+	vector<int> set;
+	generate(res,0,set,n,k);
+	return res;
+    }
+};
+
