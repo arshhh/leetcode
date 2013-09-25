@@ -1,77 +1,55 @@
 class Solution {
 public:
-    bool hasSameChars(string s1,string s2){
-	int n=s1.size();
-			for(int j=0;j<n;j++){
-				bool found = false;
-				for(int k = 0;k<n;k++){
-					if(s1[j]==s2[k]){
-						found = true;
-						break;
-					}
-				}
-				if(!found)
-					return false;
-
-			}
-			return true;
-}
-	bool allVisit(bool* visited,int i,int j){
-		for(int k=i;k<=j;k++)
-			if(!visited[k])
-				return false;
-		return true;
-	}
     bool isScramble(string s1, string s2) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-        int n1=s1.size();
-    	int n2=s2.size();
-	if(n1!=n2)
-		return false;
-	int n=n1;
-        if(n==0)
-            return true;
-	if(n==1){
-		if(s1[0]==s2[0])
-			return true;
-		return false;
-	}
-	//default false
-        int start = 0;
-	bool* visited = new bool[n]();
-	for(int i=0;i<n-1;i++){
-		for(int j=start;j<n;j++){
-			//check points
-			if(!visited[j] && s1[i]==s2[j]){
-				visited[j]=true;
-				if(j<=i && allVisit(visited,0,i) ){
-                			start = i+1;
-				if(isScramble(s1.substr(0,i+1),s2.substr(0,i+1)) && 
-					isScramble(s1.substr(i+1),s2.substr(i+1)) )
-						return true;
-				}//if
-			}//if
-		}//inner for
-	}//outer for
-
-	//swap the string
-        start = 0;
-	visited = new bool[n]();
-	for(int i=n-1;i>0;i--){
-		for(int j=0;j<n;j++){
-			if(!visited[j] && s1[i]==s2[j]){
-				visited[j]=true;
-				if(j+1<=n-i && allVisit(visited,0,n-i-1) ){
-                			 start = n-i-1;
-					if(isScramble(s1.substr(0,i),s2.substr(n-i)) &&
-						isScramble(s1.substr(i),s2.substr(0,n-i)) )
-						return true;
-                		 }
-			}
-		}//inner for
-	}//for
-	return false;
+        //three dimension dynamic programming
+        int n=s1.size();
+        if(n!=s2.size())
+            return false;
+        //valid[i][j][k] means S1[i...i+k-1] s2[j...j+k-1] can be scrambled
+        //valid[0][0][n] is what we want
+        //valid[i][j][k] is scrambled if there is valid between (i,,,j) 
+        bool valid[n][n][n];
+    
+        //start from length 1
+        for(int length=1;length<=n;length++){
+        	for(int i=0;i<n;i++){
+        		for(int j=0;j<n;j++){
+        			if(length==1){
+        				if(s1[i]==s2[j])
+        					valid[i][j][1]=true;
+        				else
+        					valid[i][j][1]=false;
+        			
+        			}else{
+        				if(i+length>n || j+length>n)
+        					valid[i][j][length]=false;
+        				else{
+        				  for(int l=1;l<length;l++){
+        					
+        					if( (valid[i][j][l]&&valid[i+l][j+l][length-l]) ||
+        						(valid[i][j+length-l][l] && valid[i+l][j][length-l]) ){
+        						valid[i][j][length]=true;
+                                break;
+        					}        
+        				    
+        				    valid[i][j][length]=false;
+        				    }
+        				}
+        		
+        			}
+        		
+        		
+        		}
+        	
+        	}
+        
+        
+        }//for
+        
+        return valid[0][0][n];
+	 
+       
     }
 };
-
