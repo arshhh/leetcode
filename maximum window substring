@@ -1,0 +1,101 @@
+class Solution {
+public:
+
+    int *** allocArray(int n1,int n2,int n3){
+        int*** result=new int**[n1];
+        for(int i=0;i<n1;i++){
+            result[i]=new int*[n2];
+            for(int j=0;j<n2;j++)
+                result[i][j]=new int[n3];
+        }
+        return result;
+    }
+    //maybe start from the first character and expand it 
+    string minWindow(string S, string T) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+    int n1=S.size();
+	int n2=T.size();
+    //first I'd like to delete the duplicates in T
+    unordered_map<char,int> map;
+    unordered_map<char,int>::iterator iter;
+    
+    for(int i=0;i<n2;i++){
+        iter=map.find(T[i]);
+        if(iter==map.end())
+            map.insert(pair<char,int>(T[i],1));
+        else
+            iter->second += 1;    
+    }
+   
+        
+    T="";
+    
+    for(iter=map.begin();iter!=map.end();iter++){
+        T += iter->first;
+    }
+    
+   
+    int old_n2=n2;
+    n2=T.size();
+    
+	//valid[i][j][k] means S[i...j] contains how many k-th element
+  
+    //size = (1+n1)*n1/2  [i][j] = (2n1-i-1)*i + j
+    int size=(1+n1)*n1/2+500;
+   //  int*** valid = allocArray(n1,n1,n2);
+	int valid[size][n2];
+    
+	for(int length=1;length<=n1;length++){
+		for(int i=0;i<n1;i++){
+			    int j=i+length-1;
+                if(j>=n1)
+                    break;
+                int index=(2*n1-i+1)*(i)/2+j;
+				for(int k=0;k<n2;k++){
+					if(length==1){
+    				    if(S[j]==T[k])
+                            valid[index][k]=1;
+                        else
+                            valid[index][k]=0;
+					}else{
+    				    if(S[j]==T[k])
+                            valid[index][k]=1+valid[index-1][k];
+                        else
+                            valid[index][k]=valid[index-1][k];
+                     
+					}
+                  
+				
+                 }//for
+		        
+                
+		  }//for
+          
+
+          
+		//check if there is answer for length
+		if(length>=old_n2){
+      	          
+            //i is the starting position
+			for(int i=0;i+length-1<n1;i++){
+                bool found=true;
+				for(int k=0;k<n2;k++){
+                    int count=map.find(T[k])->second;
+                    int index = (2*n1-i+1)*(i)/2+i+length-1;
+					if(valid[index][k]<count){
+						found=false;	
+						break;
+					}
+				}
+				if(found)
+					return S.substr(i,length);
+			}
+		}
+
+    }//for
+    
+	return "";
+    }
+};
+
