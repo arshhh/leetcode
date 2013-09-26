@@ -1,0 +1,53 @@
+class Solution {
+public:
+    void extract(vector<string> &path_vector,string path){
+    if(path=="")
+		return;
+	//find the first and second slash in the string and extract it into path_vector
+	int n=path.size();
+	int start=-1;
+	int end=-1;
+	for(int i=0;i<n;i++){
+		if(path[i]=='/'){
+            if(start==-1)
+				start=i;
+			else if(end==-1){
+				end=i-1;
+				break;
+			}
+		}
+	}
+	//don’t find the second slash
+	if(end==-1){	
+        if(path=="/.." && path_vector.size()>0)
+            path_vector.erase(path_vector.end()-1); 
+		if(path!="/" && path!="/." && path!="/..")
+			path_vector.push_back(path);	
+	}else{
+		//filter empth path and current path
+		string p=path.substr(start,end-start+1);
+        if(p=="/.." && path_vector.size()>0)
+            path_vector.erase(path_vector.end()-1);        
+		if(p!="/" && p!="/."&&p!="/..")
+			path_vector.push_back(path.substr(start,end-start+1));
+        return extract(path_vector,path.substr(end+1));	
+	}	
+}
+    string simplifyPath(string path) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        vector<string> path_vector;
+	extract(path_vector,path);
+	int n=path_vector.size();
+	if(n==0)
+		return "/";
+	string res="";
+	for(int i=0;i<n;i++){
+		res += path_vector[i];
+	}
+    if(res=="")
+        return "/";
+	return res;
+    }
+};
+
