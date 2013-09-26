@@ -1,0 +1,95 @@
+class Solution {
+public:
+    vector<string> fullJustify(vector<string> &words, int L) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+    int start=-1;
+    int end=-1;
+	int length=0;
+	string line="";
+	vector<string> res;        
+	for(int i=0;i<words.size();){
+		if(start==-1){
+			start=i;
+			end=i;
+			length+=words[i].size();
+            //last words
+            if(i==words.size()-1){
+                line=words[i];
+                if(L-length>0){
+                    string pad(L-length,' ');
+        	    	line += pad;
+                   
+                  }
+                res.push_back(line);
+            }
+            i++;
+		}else{
+            //can add words againg
+			if(length+1+words[i].size()<=L){
+				length=length+1+words[i].size();
+				end=i;
+                if(i==words.size()-1){
+                    //last line
+                    line+=words[start];
+                    for(int i=start+1;i<=end;i++){
+                        line+=(" "+words[i]);
+                    }
+                    //padding
+                    string pad(L-length,' ');
+    			    line += pad;
+                    res.push_back(line);          
+                }
+                i++;
+			}
+			else{
+				//can’t add words any more,generate the newline
+				line+=words[start];
+				int word_len=length-(end-start);
+				int space_len=L-word_len;
+                //one words
+				if(start==end){
+					string pad(space_len,' ');
+					line+=pad;
+				}else{
+					int space_ave=space_len/(end-start);
+					int mod=space_len%(end-start);
+					//i is the space
+					string pad;
+					for(int i=0;i<end-start;i++){
+						if(mod==0){
+						    string tmp(space_ave,' ');
+                            pad=tmp;
+							line+=(pad+words[start+i+1]);
+						}else{
+							if(i<mod){
+							    string tmp(space_ave+1,' ');
+                                pad=tmp;
+							}
+							else{
+								string tmp(space_ave,' ');
+                                pad=tmp;
+							}
+							line+=(pad+words[start+i+1]);
+						}
+					}//for
+				}
+				res.push_back(line);
+                line="";
+                //init variables again
+                 start=-1;
+                 end=-1;
+                length=0;
+			}
+			    
+			}
+            
+		
+	}//for
+    //the end    
+	return res;
+    }
+};
+
+
+
