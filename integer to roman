@@ -1,0 +1,67 @@
+class Solution {
+public:
+    int getDigits(int num){
+    int digit=1;
+    while(num){
+		digit*=10;
+		num/=10;
+	}
+	return digit;
+}
+    string intToRoman(int num) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function    
+ 	int digits=getDigits(num);
+	string res="";
+        for(int i=digits;i>0;i/=10){
+		int d=num/i;
+		if(d==0)
+			continue;
+		if(i==1000){
+			res.append(d,'M');
+		}else if(i==100){
+if(d==9)
+				res.append("CM");
+			else if(d>=5){
+				res.append(1,'D');
+              			  res.append(d-5,'C');
+			}
+			else if(d==4)
+				res.append("CD");
+			else
+				res.append(d,'C');
+            
+		}else if(i==10){
+if(d==9)
+				res.append("XC");
+			else if(d>=5){
+				res.append(1,'L');
+          				      res.append(d-5,'X');
+			}
+			else if(d==4)
+				res.append("XL");
+			else
+				res.append(d,'X');
+           
+		}else{
+			 if(d==9)
+				res.append("IX");
+			else if(d>=5){
+				res.append(1,'V');
+                res.append(d-5,'I');
+			}
+		
+			else if(d==4)
+				res.append("IV");
+			else
+				res.append(d,'I');
+
+		}//else
+		num=num%i;	
+	}//for
+	return res;
+    }
+};
+
+
+
