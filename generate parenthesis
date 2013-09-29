@@ -1,0 +1,32 @@
+//record the number of left parenthsis which haven't match its right parenthesis
+
+class Solution {
+public:
+    void generate(vector<string> &res,string part,int left,int n){
+		if(n==0){
+			part.append(left,')');
+			res.push_back(part);
+			return;
+		}
+		for(int i=0;i<=left;i++){
+		  	string new_part=part;
+			new_part.append(i,')');
+			int new_left=left-i;
+			new_part.append(1,'(');
+			new_left+=1;
+			generate(res,new_part,new_left,n-1);
+		}
+	}
+    vector<string> generateParenthesis(int n) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        //when placing the next left parenthesis, it has multiple choices
+	//we record the left cotinue parenthesis
+	vector<string> res;
+	string part="";
+	int left=0;
+	generate(res,part,left,n);
+	return res;
+    }
+};
+
