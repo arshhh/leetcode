@@ -1,0 +1,36 @@
+class Solution {
+public:
+//count means the number of items you need,m_index is the maximum index you can //choose
+   bool threeCombination(vector<int> &num,vector<int> set,int count,int m_index,int target,int &sum){
+    if(count==0){
+		int new_sum=set[0]+set[1]+set[2];
+		int diff=new_sum-target;
+		if(abs(diff)<abs(sum-target))
+			sum=new_sum;
+        if(diff==0)
+		    return true;
+        return false;
+	}
+	int n=num.size();
+	if(count>n-m_index)
+		return false;
+	for(int i=m_index;i<n;i++){
+		vector<int> new_set(set);
+		new_set.push_back(num[i]);
+		if(threeCombination(num,new_set,count-1,i+1,target,sum))
+            return true;
+	}
+	
+}
+
+    int threeSumClosest(vector<int> &num, int target) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        //generate all three combinations, and calculate the diff
+    int sum= target>0 ? numeric_limits<int>::max() : numeric_limits<int>::max()+target;
+	vector<int> set;
+	threeCombination(num,set,3,0,target,sum);
+    return sum;
+    }
+};
+
