@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int trap(int A[],int n) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        //stack stores the descending integers
+   
+     int max=0;
+	for(int i=0;i<n-1;){
+		//A[i] is a potential start
+		if(A[i]>A[i+1]){
+			//find the index, whose value is greater than A[i+1] and continue
+			//too see if it’s greater than A[i]
+			int end_index=-1;
+			int end_val=A[i+1];
+			int j=i+2;
+			for(;j<n;j++){
+         
+				if(A[j]>end_val){
+					end_index=j;
+					end_val=A[j];
+				}
+                if(A[j]>=A[i]){
+                    end_val=A[i];
+    				break;
+                }			
+			}
+			if(end_index==-1)
+				i++;
+			else{
+				for(int k=i+1;k<end_index;k++){
+                        max+=(end_val-A[k]);
+                    
+				}
+				i=end_index;
+			}//else
+			
+		}//if
+        else{
+            i++;
+        }
+	}//for
+    return max;
+    }
+};
+
+
