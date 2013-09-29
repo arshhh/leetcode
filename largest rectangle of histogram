@@ -17,7 +17,9 @@ public:
 		else{
 			while(!s.empty() && height[s.top()]>height[i]){
 				int h = height[s.top()];
+				//pop the top. the last 
 				s.pop();
+				  // Calculate the area with h  as smallest bar
 				int w = s.empty() ? i : i-s.top()-1;
 				max = max > h*w ? max : w*h;
 			}
