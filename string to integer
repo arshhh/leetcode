@@ -1,0 +1,46 @@
+class Solution {
+public:
+    
+
+    int atoi(const char *str) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+	int res=0;
+	bool negative=false;
+	bool head=true;
+	for(int i=0;str[i]!='\0';i++){
+		if(head){
+			if(str[i]==' ')
+				continue;
+			else if(str[i]=='+')
+				head=false;
+			else if(str[i]=='-'){
+				head=false;
+				negative=true;
+			}else if(str[i]>='0' && str[i]<='9'){
+    		    res+=(str[i]-'0');
+                head=false;         
+			}
+            else{
+				return res;
+			}
+		}else{
+			if(str[i]>='0' && str[i]<='9'){
+                if(res>numeric_limits<int>::max()/10)
+                     return negative? numeric_limits<int>::min() : numeric_limits<int>::max();
+                
+				res*=10;
+                int digit=str[i]-'0';
+                if(res>numeric_limits<int>::max()-digit)
+                     return negative? numeric_limits<int>::min() : numeric_limits<int>::max();
+				res+=digit;
+                           
+			}else{
+				 return negative ? -res : res;
+			}
+		}
+	}//for
+      return negative ? -res : res;	
+    }
+};
+
