@@ -1,0 +1,54 @@
+class Solution {
+public:
+vector<vector<int> > getSum(vector<int> &num,int end,int count,int sum){
+    vector<vector<int> > res;
+    if(count>end+1)
+		return res;
+	if(count==1){
+		for(int i=0;i<=end;i++)
+			if(num[i]==sum){
+				vector<int> v;
+				v.push_back(num[i]);
+				res.push_back(v);
+				return res;
+			}
+		return res;
+	}
+    int min=0;
+    int max=0;
+    for(int i=0;i<count;i++)
+        min+=num[i];
+    for(int i=end;end-i<count;i--)
+        max+=num[i];
+    
+    if(sum>max || sum<min)
+        return res;
+
+	for(int i=end;i>0;i--){
+        if(i!=end && num[i]==num[i+1])
+            continue;
+		vector<vector<int> > tmp=getSum(num,i-1,count-1,sum-num[i]);
+		if(tmp.size()>0){
+			for(int j=0;j<tmp.size();j++){
+				vector<int> v=tmp[j];
+				v.push_back(num[i]);
+				res.push_back(v);
+            }
+		}
+	}
+    //remove the duplicates
+   // removeDuplicates(res);
+	return res;
+}
+
+    vector<vector<int> > fourSum(vector<int> &num, int target) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+    vector<vector<int> > res;
+	if(num.size()<4)
+		return res;
+	sort(num.begin(),num.end());
+	return getSum(num,num.size()-1,4,target);
+    }
+};
+
