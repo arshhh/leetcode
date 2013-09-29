@@ -9,7 +9,7 @@ class Solution {
 public:
 
     bool isPalindrome(string s,int i, int j){
-    	while(j>i){
+        while(j>i){
 			if(s[j] == s[i]){
 				i++;
 				j--;
@@ -33,7 +33,7 @@ else{
 	for(int i=0;i<n;i++){
 		for(int j=i-1,k=i+1;j>-1 && k<n;j--,k++){
 			if(s[j]==s[k]){
-				int tmp=(j-i)*2+1;
+				int tmp=(i-j)*2+1;
 				if(tmp>len){
 					len=tmp;
 					res=s.substr(j,len);
@@ -48,22 +48,25 @@ else{
 	for(int i=0;i<n-1;i++){
 		if(s[i]!=s[i+1])
 			continue;
+        //update
+        if(len<2){
+            len=2;
+            res=s.substr(i,2);
+        }
 		for(int j=i-1,k=i+2;j>-1 && k<n;j--,k++){
 			if(s[j]==s[k]){
-				int tmp=(j-i)*2+2;
+				int tmp=(i-j)*2+2;
 				if(tmp>len){
 					len=tmp;
 					res=s.substr(j,len);
-				
-				}else{
-					break;
 				}
+                
+			}else{
+    		 break;   
 			}
 		
-		}
-	
-	}//for
-		
+		}	
+	}//for		
 	return res;
     }
 };
