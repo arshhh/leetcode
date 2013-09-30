@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int canCompleteCircuit(vector<int> &gas, vector<int> &cost) {
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+int n=gas.size();        
+for(int i=0;i<n;){
+	int remain=0;
+	//starting from i 
+	int j=i;
+	for(;j<n || j%n<i;j++){
+		remain=remain+gas[j%n]-cost[j%n];
+		if(remain<0){
+			i=j+1;
+            break;		
+		}
+	}
+	if(j%n==i){
+		return i;
+	}
+}
+return -1;
+    }
+};
+
