@@ -1,36 +1,42 @@
+/* this is similar to narrow down the search range. but it needs sort first*/
+
 class Solution {
 public:
-//count means the number of items you need,m_index is the maximum index you can //choose
-   bool threeCombination(vector<int> &num,vector<int> set,int count,int m_index,int target,int &sum){
-    if(count==0){
-		int new_sum=set[0]+set[1]+set[2];
-		int diff=new_sum-target;
-		if(abs(diff)<abs(sum-target))
-			sum=new_sum;
-        if(diff==0)
-		    return true;
-        return false;
-	}
-	int n=num.size();
-	if(count>n-m_index)
-		return false;
-	for(int i=m_index;i<n;i++){
-		vector<int> new_set(set);
-		new_set.push_back(num[i]);
-		if(threeCombination(num,new_set,count-1,i+1,target,sum))
-            return true;
-	}
-	
-}
-
     int threeSumClosest(vector<int> &num, int target) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-        //generate all three combinations, and calculate the diff
-    int sum= target>0 ? numeric_limits<int>::max() : numeric_limits<int>::max()+target;
-	vector<int> set;
-	threeCombination(num,set,3,0,target,sum);
-    return sum;
+    int n=num.size();
+    //sort
+    sort(num.begin(),num.end());
+	int closest_sum=num[0]+num[1]+num[2];
+	//three sum starting with num[i]
+	for(int i=0;i<n-2;i++){
+		int sum=num[i]+num[i+1]+num[n-1];
+		for(int j=i+1,k=n-1;j<k;){
+			int tmp_sum=num[i]+num[j]+num[k];
+            if(abs(tmp_sum-target)>abs(sum-target)){
+				closest_sum = abs(closest_sum-target) < abs(sum-target) ?
+					closest_sum : sum;
+				break;
+			}
+            //sum is better than tmp_sum
+            sum=tmp_sum;           
+            if(k==j+1){
+                closest_sum = abs(closest_sum-target) < abs(sum-target) ?
+					closest_sum : sum;
+            }
+		
+		
+			if(tmp_sum==target)
+				return tmp_sum;
+			else if(tmp_sum>target){
+				k--;
+			}else{
+				j++;
+			}
+		}
+	}//for
+	return closest_sum;
     }
 };
 
