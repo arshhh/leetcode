@@ -35,6 +35,9 @@ public:
 				j++;
 			}
 		}
+	//ignore the duplicates
+	while(num[i]==num[i+1])
+		i++;
 	}//for
 	return closest_sum;
     }
