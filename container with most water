@@ -1,18 +1,19 @@
-/* can't pass the large datasets */
 
 class Solution {
 public:
     int maxArea(vector<int> &height) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-	int n=height.size();
+    int n=height.size();
 	int max_area=0;
-	height.push_back(0);
-       	for(int i=0;i<n-2;i++){
+      for(int i=0;i<n-1;i++){
 		if(i!=0 && height[i]<height[i-1])
 			continue;
-		for(int j=i+1;j<n-1;j++){
-			if(height[j]<=height[j+1])
+        if(height[i]==0)
+            continue;
+		int min_possible_index=max_area/height[i]+i+1;
+		for(int j=n-1;j>=min_possible_index;j--){
+			if(j!=n-1 && height[j]<=height[j+1])
 				continue;
 			int w=j-i;
 			int h= min(height[i],height[j]);
