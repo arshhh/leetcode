@@ -1,0 +1,45 @@
+class Solution {
+public:
+vector<int> getCol(vector<vector<int> > &matrix, int col,int step){
+    vector<int> col_vector;
+    for(int j=0;j<matrix.size();j++)
+		col_vector.push_back(matrix[j][col]);
+	return col_vector;
+}
+    void rotate(vector<vector<int> > &matrix) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+	int n=matrix.size();
+//i is the lines 
+     for(int i=0;i<n/2;i++){
+	vector<int> left_col;
+	//left column to up row
+	//
+	int tmp=matrix[i][i];
+	matrix[i][i]=matrix[n-1-i][i];
+	matrix[n-1-i][i]=matrix[n-1-i][n-1-i];
+	matrix[n-1-i][n-1-i]=matrix[i][n-1-i];
+	matrix[i][n-1-i] = tmp;
+
+	//save left column first
+	left_col = getCol(matrix,i,i);
+	//move down row to left column
+	for(int j=i+1;j<matrix.size()-i-1;j++)
+		matrix[j][i]=matrix[n-1-i][j];
+	//move right column to down
+	for(int j=i+1;j<matrix.size()-i-1;j++)
+		matrix[n-1-i][j] = matrix[n-1-j][n-1-i];
+	//move up row to right column
+	for(int j=i+1;j<matrix.size()-i-1;j++)
+		matrix[j][n-1-i] = matrix[i][j];
+	//move left column to up row
+	for(int j=i+1;j<matrix.size()-i-1;j++)	
+		matrix[i][j]=left_col[n-1-j];
+
+        }//for
+    }
+   
+};
+
+
+
