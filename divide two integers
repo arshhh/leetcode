@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+    if(dividend==0)
+        return 0;
+        bool negative=false;
+	if( (dividend<0 && divisor >0) || (dividend>0 && divisor<0) )
+		negative=true;
+    //overflow
+    long long long_dividend=abs((long long)dividend);
+    long long long_divisor=abs((long long)divisor);
+
+	//divisor is a multiplication of 2
+	while( (long_divisor&1)==0 ){
+		long_dividend = long_dividend >> 1;
+		long_divisor = long_divisor>>1;
+      
+	}
+
+	if(long_divisor==1)
+		return negative ? -long_dividend : long_dividend;
+  
+	int shift=0;
+    long long tmp=long_divisor;
+	while(long_dividend>=tmp){
+		shift++;
+		tmp=tmp<<1;
+	}
+    shift--;
+    tmp=tmp>>1;
+    int res=0;
+    if(shift>0){
+     res += (1<<shift);
+     long_dividend -= (tmp);
+    }
+    
+    while(long_dividend>=long_divisor){
+        res++;
+        long_dividend-=long_divisor;
+    }
+	return negative ? -res : res;
+    }
+};
+
