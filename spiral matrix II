@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int> > &matrix) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+    vector<int> result;
+	//m is rows
+	int m=matrix.size();
+	if(m==0)
+		return result;
+	// n is columns
+	int n=matrix[0].size();
+	
+       	 int layers=(min(m,n)+1)/2;
+	 for(int i=0;i<layers;i++){
+		//top row
+		for(int j=0;j<n-2*i;j++){
+			result.push_back(matrix[i][j+i]);
+		}
+		//right column
+		for(int j=0;j<m-2*(i+1);j++){
+			result.push_back(matrix[i+1+j][n-i-1]);
+		}
+		//down row
+		if(m-1-2*i>0){
+			for(int j=0;j<n-2*i;j++){
+				result.push_back(matrix[m-1-i][n-1-i-j]);
+			}
+		}
+		//left column
+		if(n-1-2*i>0){
+			for(int j=0;j<m-2*(i+1);j++){
+				result.push_back(matrix[m-2-i-j][i]);
+			}
+		}
+	}
+	return result;
+    }
+};
+
+
