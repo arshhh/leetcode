@@ -1,0 +1,39 @@
+class Solution {
+public:
+    vector<vector<int> > generateMatrix(int n) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+    int layers=(n+1)/2;
+    int num=1;
+	vector<vector<int> > matrix(n,vector<int>(n));
+	for(int i=0;i<layers;i++){
+		//j is the number of items
+		//top 5-2-1=2 i==2 
+		if(layers==1 || (i==layers-1 && layers>2 ){
+			matrix[i][i]=num;
+			break;
+		}
+		for(int j=0;j<n-2*i-1;j++){
+			matrix[i][i+j]=num;
+			num++;
+		}
+		//right
+		for(int j=0;j<n-2*i-1;j++){
+			matrix[i+j][n-1-i]=num;
+			num++;
+		}
+		//down
+		for(int j=0;j<n-2*i-1;j++){
+			matrix[n-1-i][n-1-i-j]=num;
+			num++;
+		}
+		//left
+		for(int j=0;j<n-2*i-1;j++){
+			matrix[n-1-i-j][i]=num++;
+		}
+	
+	}
+	return matrix;
+    }
+};
+
