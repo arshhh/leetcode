@@ -1,0 +1,59 @@
+class Solution {
+public:
+int findLeftIndex(int A[],int n,int target){
+    int low=0;
+	int high=n-1;
+	int left_index=-1;
+	while(low<=high){
+		int mid=(low+high)/2;
+		if(target==A[mid]){
+			if(mid==0 || A[mid-1]<A[mid] ){
+				return mid;
+			}
+			else{
+				high=mid-1;
+			}
+		}else if(target>A[mid]){
+			low=mid+1;
+		}else{
+			high=mid-1;
+		}
+	}
+	return left_index;
+}
+int findRightIndex(int A[],int n,int target){
+	int low=0;
+	int high=n-1;
+	int right_index=-1;
+	while(low<=high){
+		int mid=(low+high)/2;
+		if(A[mid]==target){
+			if(mid==n-1 || A[mid+1]>A[mid])
+				return mid;
+			low=mid+1;
+		}else if(A[mid]>target)
+			high=mid-1;
+		else
+			low=mid+1;
+	}
+	return right_index;
+}
+    vector<int> searchRange(int A[], int n, int target) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        //find the first index that’s equal to target
+    vector<int> result;
+	int left_index=findLeftIndex(A,n,target);
+	if(left_index==-1){
+		result.push_back(-1);
+		result.push_back(-1);
+		return result;
+	}
+	int right_index=findRightIndex(A,n,target);
+	result.push_back(left_index);
+	result.push_back(right_index);
+	return result;
+		
+    }
+};
+
