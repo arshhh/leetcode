@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int lengthOfLastWord(const char *s) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        bool start=false;
+        int len=0;
+        while(*s!='\0'){
+            if(*s!=' '){
+                if(!start){
+                    start=true;
+                    len=1;
+                }else
+                    len++;
+            }else{
+                if(start)
+                    start=!start;
+            }
+            s++;
+        }
+        return len;
+    }
+};
