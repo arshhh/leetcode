@@ -1,0 +1,51 @@
+class Solution {
+public:
+    void addResult(vector<vector<int> > &result,vector<vector<int> > &old,int item,int count){
+	for(int i=0;i<old.size();i++){
+		vector<int> old_set=old[i];
+		for(int j=0;j<count;j++)
+			old_set.push_back(item);
+		result.push_back(old_set);
+	}
+}
+	vector<vector<int> > getCombinations(vector<int> &candidates,int start,int end,int target){
+	vector<vector<int> > result;
+	//target <0
+	if(target<0)
+		return result;
+	//empty choices
+	if(end<start){
+		if(target==0){
+			vector<int> empty;
+            result.push_back(empty);
+            return result;	
+		}else{
+			return result;
+		}
+	}
+	//set endding with num[i]
+	for(int i=end;i>=start;i--){
+		if( i+1<=end && candidates[i]==candidates[i+1])
+			continue;
+		for(int j=1;target-candidates[i]*j>=0;j++){
+			int new_target=target-candidates[i]*j;
+			vector<vector<int> > tmp=getCombinations(candidates,0,i-1,new_target);
+			if(!tmp.empty()){
+				addResult(result,tmp,candidates[i],j);	
+			}
+		}
+	}
+	//set with empty candidates
+	vector<vector<int> > tmp=getCombinations(candidates,0,-1,target);
+	addResult(result,tmp,0,0);
+	return result;
+}
+    vector<vector<int> > combinationSum(vector<int> &candidates, int target) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+    int n=candidates.size();
+	sort(candidates.begin(),candidates.end());
+	return getCombinations(candidates,0,n-1,target);
+    }
+};
+
