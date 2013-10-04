@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char> > &matrix) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        int m=matrix.size();
+
+    if(m==0)
+		return 0;
+	int n=matrix[0].size();
+	if(n==0)
+		return 0;
+	int max=0;
+	for(int i=0;i<m;i++){
+		for(int j=0;j<n;j++){
+			if(matrix[i][j]=='0')
+				continue;
+			int max_col=n;
+			if( (m-i)*(n-j)<=max)
+				continue;
+			for(int row=i;row<m;row++){
+				if(matrix[row][j]=='0')
+					break;
+				for(int col=j;col<max_col;col++){
+					if(matrix[row][col]=='0'){
+						max_col=col;
+						break;
+					}
+						
+					int area=(row-i+1)*(col-j+1);
+					max = max > area ? max : area;
+				}//for
+
+			}//for
+
+		}//for
+
+	}//for
+	return max;
+    }
+};
