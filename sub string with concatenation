@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<int> findSubstring(string S, vector<string> &L) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+    unordered_map<string,int> map;
+	unordered_map<string,int>::iterator iter;
+	//if L is empty or it contains empty string
+	int len=L.size()*L[0].size();
+	int w_len=L[0].size();
+	vector<int> result;
+    for(int i=0;i<L.size();i++){
+		iter=map.find(L[i]);
+		if(iter!=map.end()){
+			iter->second++;
+		}else{
+			map.insert(pair<string,int>(L[i],1));
+		}	
+	}//for
+	for(int i=0;i<S.size()&&i+len-1<S.size();i++){
+		//copy map
+		bool found=true;
+		unordered_map<string,int> c_map(map);
+		for(int j=0;j<L.size();j++){
+			string word=S.substr(i+j*w_len,w_len);
+			iter=c_map.find(word);
+			if(iter==c_map.end()){
+				found=false;
+				break;
+			}else{
+				if(iter->second==0){
+					found=false;
+					break;
+				}else
+					iter->second--;
+			}	
+		}
+		if(found)
+    			result.push_back(i);
+	}
+	return result;
+    }
+};
