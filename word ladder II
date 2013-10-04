@@ -1,0 +1,96 @@
+struct Node{
+    string cur;
+    Node* pre;
+    Node(string a){
+        cur=a;
+        pre=NULL;
+    }
+};
+
+class Solution {
+public:
+    bool isOneDistance(string a,string b){
+        int diff=0;
+        for(int i=0;i<a.size();i++){
+            if(a[i]!=b[i]){
+                diff++;
+                if(diff>1)
+                    return false;
+            }
+        }
+        return diff==1 ? true : false;
+    }
+    vector<string> getNext(unordered_set<string> &dict,string pre){
+        unordered_set<string>::iterator iter;
+        vector<string> result;
+        for(int i=0;i<pre.size();i++){
+            char tmp=pre[i];
+            for(char j='a';j<='z';j++){
+                if(pre[i]==j)
+                    continue;
+            
+                pre[i]=j;
+                if(dict.find(pre)!=dict.end())
+                    result.push_back(pre);
+                pre[i]=tmp;
+            }
+            
+        }
+        return result;
+    }
+    vector<string> getPath(Node* cur,string end){
+        vector<string> path;
+        path.insert(path.begin(),end);
+        path.insert(path.begin(),cur->cur);
+         
+        while(cur->pre){
+            cur=cur->pre;       
+            path.insert(path.begin(),cur->cur);
+        }
+        return path;
+    }
+    vector<vector<string>> findLadders(string start, string end, unordered_set<string> &dict) {
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        deque<Node*> level;
+        Node* start_node=new Node(start);
+        level.push_back(start_node);
+        vector<vector<string> > result;
+       
+        while(!level.empty()){
+            //chec
+            //check if there are words that can reach the end
+            for(int i=0;i<level.size();i++){
+                if(isOneDistance(level[i]->cur,end)){
+                    //get the path
+                    result.push_back(getPath(level[i],end));
+                }
+            }//for
+            //if the result is zero
+            if(result.size()!=0)
+                return result;
+            //remove words from dict
+            for(int i=0;i<level.size();i++)
+                dict.erase(level[i]->cur);
+            if(dict.empty())
+                return result;
+            //update level
+            int old_size=level.size();
+            for(int i=0;i<old_size;i++){
+                if(dict.empty()){
+                    break;
+                }
+                string word=level[i]->cur;
+                //get the next string with one distance from word
+                vector<string> next_vector=getNext(dict,word);
+                for(int j=0;j<next_vector.size();j++){
+                    Node* node=new Node(next_vector[j]);
+                    node->pre=level[i];
+                    level.push_back(node);
+                }
+            }//for
+            for(int i=0;i<old_size;i++)
+                  level.pop_front();
+        }
+        return result;
+    }
+};
