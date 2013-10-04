@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int getLength(char *p){
+        int len=0;
+        while(*p!='\0'){
+            len++;
+            p++;
+        }
+        return len;
+    }
+    char *strStr(char *haystack, char *needle) {
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        int n1=getLength(haystack);
+        int n2=getLength(needle);
+        for(int i=0;i+n2-1<n1;i++){
+            bool found=true;
+            for(int j=0;j<n2;j++){
+                if(haystack[i+j]!=needle[j]){
+                    found=false;
+                    break;
+                }
+            }
+            if(found)
+                return &haystack[i];
+        }//for
+        return NULL;
+    }
+};
