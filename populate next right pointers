@@ -20,21 +20,20 @@ public:
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
         if(root==NULL)
-    return;
+		  return;
 	TreeLinkNode* left  = root;
-
+	root->next = NULL;
 	while(left->left!=NULL){
 		TreeLinkNode* tmp = left;
+	
+		//iterate though this level
+		while(tmp!=NULL){
+			tmp->left->next = tmp->right;
+			tmp->right->next = tmp->next ? tmp->next->left : NULL;
+			tmp = tmp->next;
+		}
+		//move to next level
 		left = left->left;
-while(tmp!=NULL){
-	tmp->left->next = tmp->right;
-	if(tmp->next!=NULL){
-		tmp->right->next = tmp->next->left;
-	}
-	tmp = tmp->next;
-}		
 	}
     }
-  
-
 };
