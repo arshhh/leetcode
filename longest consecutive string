@@ -10,6 +10,7 @@ public:
 			map.insert(pair<int,int>(num[i],1)); 
 		}
 		unordered_map<int,int>::iterator iter,tmp;
+		int max=1;
 		for(iter=map.begin();iter!=map.end();iter++){
 			pair<int,int> val = *iter;
 			//has been visited
@@ -33,15 +34,9 @@ public:
 				tmp->second = -1;
 				v2--;
 			}
+			max=max>iter->second ? max : iter->second;
+			
 		}//for
-		//check the maximum value
-		int max=1;
-		for(iter=map.begin();iter!=map.end();iter++){
-			if(iter->second>max){
-				max = iter->second;
-			}
-
-		}
 		return max;
     }
 };
