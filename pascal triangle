@@ -15,15 +15,13 @@ public:
     if(numRows <= 0)
         return result;
     vector<int> upRow(1,1);
-	result.at(0) = upRow;
+	result[0] = upRow;
 	for(int i=1;i<numRows;i++){
-		vector<int> curRow(i+1);
-		curRow.at(0) = upRow.at(0);
+		vector<int> curRow(i+1,1);
 		for(int j=1;j<i;j++){
 			curRow.at(j) = upRow.at(j-1)+upRow.at(j);
 		}
-		curRow.at(i) = upRow.at(i-1);
-		result.at(i) = curRow;
+		result[i] = curRow;
 		upRow = curRow;	
 	}
 	return result;
