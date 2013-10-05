@@ -9,24 +9,16 @@
  */
 class Solution {
 public:
-int getMax(int i,int j){
-        int max = i;
-    if(j>max)
-		max = j;
-    return max;
-    
-}
-int getMax(int i,int j, int k){
-    int max = i;
-	if(j>max)
-		max = j;
-	if(k>max)
-		max = k;
-	return max;
-}
+//get the maximum path in this tree and the maximum path that ends at root
+//path can't be empty while sps can be empty
  void getPathInfo(TreeNode *node,int& sps,int& ps){
      int val = node->val;
-     int sps1,sps2,ps1,ps2;
+     //sps1 is the maximum path ends at root of left tree it can be empty
+     //ps1 is the maximum path of left tree
+     int sps1=0;
+     int sps2=0;
+     int ps1;
+     int ps2;
      if(node->left == NULL && node->right==NULL){
          sps = val>0 ? val : 0;
          ps  = val;    
@@ -36,50 +28,29 @@ int getMax(int i,int j, int k){
     ps  = val;
 	if(node->left != NULL){
 		getPathInfo(node->left,sps1,ps1);
-        sps = getMax(sps,sps1+val);
-        ps  = getMax(ps,ps1,sps1+val);
+		sps = max(sps,sps1+val);
+		ps  = max(max(ps,ps1),sps1+val);
 	}
 
 	if(node->right!=NULL){
 		getPathInfo(node->right,sps2,ps2);
-        sps = getMax(sps,sps2+val);
-        ps  = getMax(ps, ps2,sps2+val);
+		sps = max(sps,sps2+val);
+		ps = max( max(ps,ps2),sps2+val );
 	}
     
     if(node->left !=NULL && node->right!=NULL){
-        ps = getMax(ps,sps1+val+sps2);
+        ps = max(ps,sps1+val+sps2);
     }
 
 }
     int maxPathSum(TreeNode *root) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-    int val = root->val;
-
-    
-    int sps,ps,sps1,sps2,ps1,ps2;
-     if(root->left == NULL && root->right==NULL){
-         sps = val>0 ? val : 0;
-         ps  = val;    
-         return ps;
-     }
-    
-    sps = 0;
-    ps = val;
-	if(root->left != NULL){
-		getPathInfo(root->left,sps1,ps1);  
-        ps  = getMax(ps,ps1,sps1+val);
-	}
- 
-	if(root->right!=NULL){
-		getPathInfo(root->right,sps2,ps2);
-        ps  = getMax(ps, ps2,sps2+val);
-	}
-    
-     if(root->left !=NULL && root->right!=NULL){
-        ps = getMax(ps,sps1+val+sps2);
-    }
+	if(root==NULL)
+		return 0;
+	int sps=0;
+	int ps;
+	getPathInfo(root,sps,ps);
 	return ps;
-    }
 };
 
