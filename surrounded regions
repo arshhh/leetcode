@@ -8,7 +8,48 @@ can pass the small tests, but not the large ones, it prompts run time error, rea
 class Solution {
 public:
 
-void mark(vector<vector<char> > &board, int i, int j, int rows, int cols){
+void mark_bfs(vector<vector<char> > &board, int i, int j, int rows, int cols){
+    queue<pair<int,int> > pos_queue;
+    pos_queue.push(pair<int,int>(i,j));
+    while(!pos_queue.empty()){
+        pair<int,int> pos=pos_queue.front();
+    	board[pos.first][pos.second]='1';
+    	if(pos.first+1<rows && board[pos.first+1][pos.second]=='O')
+    		pos_queue.push(pair<int,int>(pos.first+1,pos.second));
+    		
+    	if(pos.first-1>-1 && board[pos.first-1][pos.second]=='O')
+    		pos_queue.push(pair<int,int>(pos.first-1,pos.second));
+    		
+    	if(pos.second+1<cols && board[pos.first][pos.second+1]=='O')
+    		pos_queue.push(pair<int,int>(pos.first,pos.second+1));
+    		
+    	if(pos.second-1>-1 && board[pos.first][pos.second-1]=='O')
+    		pos_queue.push(pair<int,int>(pos.first,pos.second-1));
+    		
+    	pos_queue.pop();
+    }
+}
+
+void mark(vector<vector<char> > &board,int i,int j,int rows,int cols){
+    queue<int> pos_queue;
+    pos_queue.push(i*cols+j);
+    while(!pos_queue.empty()){
+        int pos=pos_queue.front();
+        int x=pos/cols;
+        int y=pos%cols;
+        board[x][y]='1';
+        pos_queue.pop();
+        if(x+1<rows && board[x+1][y]=='O')
+            pos_queue.push( pos+cols );
+        if(x-1>-1 && board[x-1][y]=='O')
+            pos_queue.push( pos-cols );
+        if(y+1<cols && board[x][y+1]=='O')
+            pos_queue.push( pos+1);
+        if(y-1>-1 && board[x][y-1] == 'O')
+            pos_queue.push(pos-1);
+    }
+}
+void mark_dfs(vector<vector<char> > &board, int i, int j, int rows, int cols){
     board[i][j] = '1';
     if(i+1<rows){
     	if(board.at(i+1).at(j)=='O')
