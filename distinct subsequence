@@ -6,34 +6,32 @@ public:
     int n1=S.size();
     int n2=T.size();
     if(n1<n2)
-		return 0;
+    	return 0;
 	if(n2==0)
 		return 1;
 	//n1 n2 should be large than 1
 
-	int** v=new int*[n1+1];
-	for(int i=0;i<n1+1;i++)
-		v[i] = new int[n2+1]();
+	int* v=new int[n2+1]();
+
 //v[i][j] means the numDistinct between S[0~i-1], T[0~j-1], the initial valus is zero
 // v[i][j]
 
-for(int k=0;k<n1+1;k++)
-	v[k][0] = 1;
+    v[0]=1;
+    
+    for(int i=1;i<n1+1;i++){
 
-for(int j=1;j<n2+1;j++){
-	for(int i=1;i<n1+1;i++){
-		if(i<j){
-			continue;
-		}
+        for(int j=n2;j>0;j--){
+            //substring of S is less than T
+		    if(i<j){
+		    	continue;
+		    }
 		//i>=j
 		if(T[j-1] == S[i-1] ){
-			v[i][j] = v[i-1][j-1] + v[i-1][j];
-		}else{
-		    v[i][j] = v[i-1][j];
-    	}
+	    	v[j] = v[j-1] + v[j];
+		}
     }
     }
-    return v[n1][n2];
+    return v[n2];
 
     }
 };
