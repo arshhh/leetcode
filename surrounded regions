@@ -9,10 +9,10 @@ class Solution {
 public:
 
 void mark(vector<vector<char> > &board, int i, int j, int rows, int cols){
-    board.at(i).at(j) = '1';
+    board[i][j] = '1';
     if(i+1<rows){
     	if(board.at(i+1).at(j)=='O')
-			mark(board,i+1,j,rows,cols);
+		mark(board,i+1,j,rows,cols);
 	}
     if(i-1>-1){
        if(board.at(i-1).at(j)=='O')
@@ -24,8 +24,8 @@ void mark(vector<vector<char> > &board, int i, int j, int rows, int cols){
 
 	}
     if(j-1>-1){
-		if(board.at(i).at(j-1)=='O')
-			mark(board,i,j-1,rows,cols);
+	if(board.at(i).at(j-1)=='O')
+		mark(board,i,j-1,rows,cols);
 	} 
 }
     void solve(vector<vector<char> > &board) {
@@ -34,10 +34,10 @@ void mark(vector<vector<char> > &board, int i, int j, int rows, int cols){
     int rows= board.size();
 	if(rows==0)
 		return;
-    int cols = board.at(0).size();
-//first row
+    int cols = board[0].size();
+	//first row
     for(int j=0;j<cols;j++)
-	    if(board.at(0).at(j) == 'O')
+	    if(board[0][j] == 'O')
 		    mark(board,0,j,rows,cols);
 
     for(int i = 1;i<rows-1;i++){
