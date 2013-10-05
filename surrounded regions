@@ -8,67 +8,38 @@ can pass the small tests, but not the large ones, it prompts run time error, rea
 class Solution {
 public:
 
-void mark_bfs(vector<vector<char> > &board, int i, int j, int rows, int cols){
-    queue<pair<int,int> > pos_queue;
-    pos_queue.push(pair<int,int>(i,j));
-    while(!pos_queue.empty()){
-        pair<int,int> pos=pos_queue.front();
-    	board[pos.first][pos.second]='1';
-    	if(pos.first+1<rows && board[pos.first+1][pos.second]=='O')
-    		pos_queue.push(pair<int,int>(pos.first+1,pos.second));
-    		
-    	if(pos.first-1>-1 && board[pos.first-1][pos.second]=='O')
-    		pos_queue.push(pair<int,int>(pos.first-1,pos.second));
-    		
-    	if(pos.second+1<cols && board[pos.first][pos.second+1]=='O')
-    		pos_queue.push(pair<int,int>(pos.first,pos.second+1));
-    		
-    	if(pos.second-1>-1 && board[pos.first][pos.second-1]=='O')
-    		pos_queue.push(pair<int,int>(pos.first,pos.second-1));
-    		
-    	pos_queue.pop();
-    }
-}
 
-void mark(vector<vector<char> > &board,int i,int j,int rows,int cols){
-    queue<int> pos_queue;
+
+void mark(vector<vector<char> > &board,int i,int j,int rows,int cols,queue<int> &pos_queue){
+   // queue<int> pos_queue;
+    board[i][j]='1';
     pos_queue.push(i*cols+j);
+    
     while(!pos_queue.empty()){
         int pos=pos_queue.front();
         int x=pos/cols;
         int y=pos%cols;
-        board[x][y]='1';
+     
         pos_queue.pop();
-        if(x+1<rows && board[x+1][y]=='O')
+        if(x+1<rows && board[x+1][y]=='O'){
+             board[x+1][y]='1';
             pos_queue.push( pos+cols );
-        if(x-1>-1 && board[x-1][y]=='O')
+        }
+        if(x-1>-1 && board[x-1][y]=='O'){
+               board[x-1][y]='1';
             pos_queue.push( pos-cols );
-        if(y+1<cols && board[x][y+1]=='O')
+        }
+        if(y+1<cols && board[x][y+1]=='O'){
+               board[x][y+1]='1';
             pos_queue.push( pos+1);
-        if(y-1>-1 && board[x][y-1] == 'O')
+        }
+        if(y-1>-1 && board[x][y-1] == 'O'){
+               board[x][y-1]='1';
             pos_queue.push(pos-1);
+        }
     }
 }
-void mark_dfs(vector<vector<char> > &board, int i, int j, int rows, int cols){
-    board[i][j] = '1';
-    if(i+1<rows){
-    	if(board.at(i+1).at(j)=='O')
-		mark(board,i+1,j,rows,cols);
-	}
-    if(i-1>-1){
-       if(board.at(i-1).at(j)=='O')
-    		mark(board,i-1,j,rows,cols);       
-    }
-	if(j+1<cols){
-		if(board.at(i).at(j+1)=='O')
-			mark(board,i,j+1,rows,cols);
 
-	}
-    if(j-1>-1){
-	if(board.at(i).at(j-1)=='O')
-		mark(board,i,j-1,rows,cols);
-	} 
-}
     void solve(vector<vector<char> > &board) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
@@ -76,32 +47,33 @@ void mark_dfs(vector<vector<char> > &board, int i, int j, int rows, int cols){
 	if(rows==0)
 		return;
     int cols = board[0].size();
+    queue<int> pos_queue;
 	//first row
     for(int j=0;j<cols;j++)
 	    if(board[0][j] == 'O')
-		    mark(board,0,j,rows,cols);
+		    mark(board,0,j,rows,cols,pos_queue);
 
-    for(int i = 1;i<rows-1;i++){
-		vector<char> rowV = board.at(i);
-		if(rowV.at(0) == 'O')
-			mark(board,i,0,rows,cols);
-		if(rowV.at(cols-1) == 'O')	
-			mark(board,i,cols-1,rows,cols);
+	 for(int i = 1;i<rows-1;i++){
+	
+		if(board[i][0] == 'O')
+			mark(board,i,0,rows,cols,pos_queue);
+		if(board[i][cols-1]== 'O')	
+			mark(board,i,cols-1,rows,cols,pos_queue);
 	}
 	
 	if(rows>1){
 		for(int j=0;j<cols;j++){
-			if(board.at(rows-1).at(j) == 'O')
-			     mark(board,rows-1,j,rows,cols);
+			if(board[rows-1][j] == 'O')
+			     mark(board,rows-1,j,rows,cols,pos_queue);
 		}
 	}
 	//change zero to x
 	for(int i = 0;i<rows;i++){
 		for(int j=0;j<cols;j++){
-			if(board.at(i).at(j)=='O')
-				board.at(i).at(j) = 'X';
-			else if( board.at(i).at(j) == '1')
-				board.at(i).at(j) = 'O';
+			if(board[i][j]=='O')
+				board[i][j]= 'X';
+			else if( board[i][j]== '1')
+				board[i][j] = 'O';
     
          
 		}	
