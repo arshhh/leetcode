@@ -14,26 +14,37 @@ public:
         // DO NOT write int main() function
         if(root == NULL)
     return 0;
-       vector<TreeNode*> v;
+           queue<TreeNode*> v;
 	int depth = 1;
-      v.push_back(root);
-	while(v.size()>0){
-		vector<TreeNode*> tmp;
-		for(int i=0;i<v.size();i++){
-			TreeNode* node = v.at(i);
-			if(node->left==NULL && node->right == NULL)
-				return depth;
-			else{
-				if(node->left!=NULL)
-					tmp.push_back(node->left);
-				if(node->right!=NULL)
-					tmp.push_back(node->right);	
-				}
+      	v.push(root);
+      	int lev1=1;
+      	int lev2=0;
+	while(!v.empty()){
+		
+		
+		TreeNode* node = v.front();
+        v.pop();
+		lev1--;
+		//it's a leaf
+		if(node->left==NULL && node->right == NULL)
+			return depth;
+		else{
+			if(node->left!=NULL){
+				v.push(node->left);
+				lev2++;
+			}
+			if(node->right!=NULL){
+				v.push(node->right);
+				lev2++;
+			}
 		}
-		v=tmp;
-		depth++;
+		if(lev1==0){
+			depth++;
+			lev1=lev2;
+			lev2=0;
+		}
 	}
-
+	return depth;
     }
 };
 
