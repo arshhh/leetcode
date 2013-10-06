@@ -13,37 +13,32 @@ public:
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
     vector<vector<int> > result;
-	if(root ==NULL){
+	if(root==NULL){
 		return result;
 	}
-            if(root->left==NULL && root->right==NULL){
-	if(root->val == sum){
-		vector<int> path;
-		path.push_back(root->val);
-		result.push_back(path);
+	//it's a leaf
+	if(root->left==NULL && root->right==NULL){
+		if(root->val==sum){
+			vector<int> path;
+			path.push_back(sum);
+			result.push_back(path);
+			return result;
+		}
+		return result;
+	
 	}
-	return result;
-	}
-        if(root->left!=NULL){
-    vector<vector<int> > tmp = pathSum(root->left,sum-root->val);
-    if(tmp.size()>0){
-	for(int i=0;i<tmp.size();i++){
-		vector<int> path = tmp.at(i);
+	vector<vector<int> > left_vector=pathSum(root->left,sum-root->val);
+	vector<vector<int> > right_vector=pathSum(root->right,sum-root->val);
+	for(int i=0;i<left_vector.size();i++){
+		vector<int> path=left_vector[i];
 		path.insert(path.begin(),root->val);
 		result.push_back(path);
 	}
-    }
-       }
-        if(root->right!=NULL){
- vector<vector<int> > tmp = pathSum(root->right,sum-root->val);
-if(tmp.size()>0){
-	for(int i=0;i<tmp.size();i++){
-		vector<int> path = tmp.at(i);
+	for(int i=0;i<right_vector.size();i++){
+		vector<int> path=right_vector[i];
 		path.insert(path.begin(),root->val);
 		result.push_back(path);
-	}
-}//if
-    }//if
+	}	
 	return result;
     }
 };
