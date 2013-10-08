@@ -1,0 +1,40 @@
+/* 
+
+This algorithm is a little like the longgest common string one.
+
+*/
+
+
+class Solution {
+public:
+
+    int lengthOfLongestSubstring(string s) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+	int size = s.size();
+	if(size < 2)
+		return size;
+	int length = 0;
+    int i=0;
+    bool t[26]={false};
+    //test string endding at index j 
+	for(int j=0;j<size;j++){
+        //test if repeated
+        if(t[s[j]-'a']==false){
+            t[s[j]-'a']=true;
+            continue;
+        }
+        //update length
+        length=length > j-i ? length : j-i;
+        while(s[i]!=s[j]){
+            t[s[i]-'a']=false;
+            i++;
+        }
+        i++;
+	}
+    length = max(length,size-i);
+	
+    return length;
+    }
+};
+
