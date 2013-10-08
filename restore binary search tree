@@ -31,12 +31,13 @@ public:
     
     void recoverTree(TreeNode *root) {
         // Note: The Solution object is instantiated only once and is reused by each test case.
-        if(root=NULL)
+        if(root==NULL)
             return;
         TreeNode* first=NULL;
         TreeNode* second=NULL;
         TreeNode* pre=NULL;
         inorderTraversal(root,pre,first,second);
-        swap(first->val,second->val);
+        if(first!=NULL)
+          swap(first->val,second->val);
     }
 };
