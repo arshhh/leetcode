@@ -1,0 +1,42 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void inorderTraversal(TreeNode* root,TreeNode* & pre,TreeNode* &first,TreeNode* &second){
+        if(root==NULL)
+            return;
+        inorderTraversal(root->left,pre,first,second);
+        if(pre!=NULL && root->val<pre->val){
+            if(!first){
+                first=new TreeNode(-1);
+                second=new TreeNode(-1);
+                first=pre;
+                second=root;
+            }else{
+                second=root;
+            }
+        }
+        if(pre==NULL)
+            pre=new TreeNode(-1);
+        pre=root;
+        inorderTraversal(root->right,pre,first,second);
+    }
+    
+    void recoverTree(TreeNode *root) {
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        if(root=NULL)
+            return;
+        TreeNode* first=NULL;
+        TreeNode* second=NULL;
+        TreeNode* pre=NULL;
+        inorderTraversal(root,pre,first,second);
+        swap(first->val,second->val);
+    }
+};
