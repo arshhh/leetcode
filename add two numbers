@@ -13,36 +13,25 @@ public:
         // DO NOT write int main() function
         if(l1==NULL && l2==NULL)
     return NULL;
-ListNode* head = new ListNode(0);
-ListNode* tmp = head;
-ListNode* previous = NULL;
-int carry = 0;
-	while(l1!=NULL || l2!=NULL || carry!=0){
-		int val1=0;
-		int val2=0;
-		if(l1!=NULL){
-			val1=l1->val;
-			l1=l1->next;
-		}
-		if(l2!=NULL){
-			val2=l2->val;
-			l2=l2->next;
-		}
-		tmp->val = val1+val2+carry;
-		if(tmp->val>9){
-			tmp->val -= 10;
-			carry = 1;
-		}
-		else{
-			carry = 0;
-		}
-		if(previous!=NULL){
-			previous->next = tmp;
-		}
-		previous = tmp;
-		tmp = new ListNode(0);
+ListNode* result = new ListNode(-1);
+ListNode* head=result;
+    int carry = 0;
+    while(l1!=NULL || l2!=NULL || carry!=0){
+		int val1=l1!=NULL ? l1->val : 0;
+		int val2=l2!=NULL ? l2->val : 0;
+		int sum = val1+val2+carry;
+		int val=sum%10;
+		carry=sum/10;
+		ListNode* node=new ListNode(val);
+		head->next=node;
+		head=head->next;
+        if(l1) l1=l1->next;
+        if(l2) l2=l2->next;
 	}
-return head;
+	
+	head=result->next;
+	delete result;
+	return head;
     }
 };
 
