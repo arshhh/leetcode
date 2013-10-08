@@ -10,26 +10,36 @@ class Solution {
 public:
     RandomListNode *copyRandomList(RandomListNode *head) {
         // Note: The Solution object is instantiated only once and is reused by each test case.
-        //create the objects first
         if(head==NULL)
-            return head;
-        RandomListNode* h=head;
-        unordered_map<RandomListNode*,RandomListNode*> map;
-        while(h!=NULL){
-            RandomListNode* nnode=new RandomListNode(h->label);
-            map.insert(pair<RandomListNode*,RandomListNode*>(h,nnode));
-            h=h->next;
+            return NULL;
+        RandomListNode* tmp=head;
+        //make a copy
+        while(tmp!=NULL){
+            RandomListNode* next=tmp->next;
+            RandomListNode* copy=new RandomListNode(tmp->label);
+            tmp->next=copy;
+            copy->next=next;
+            tmp=next;
         }
-        h=head;
-        //connect 
-        while(h!=NULL){
-            RandomListNode* nnode=map.find(h)->second;
-            nnode->next=h->next? map.find(h->next)->second : NULL;
-            
-            nnode->random=h->random? map.find(h->random)->second: NULL;
-    
-            h=h->next;
+     
+        //create random connection
+        tmp=head;
+        while(tmp!=NULL){
+            tmp->next->random=tmp->random==NULL ? NULL : tmp->random->next;
+            tmp=tmp->next->next;
         }
-        return map.find(head)->second;
+        //divide the two lists;
+        tmp=head;
+        RandomListNode* result=tmp->next;
+        RandomListNode* tmp2=result;
+        while(tmp!=NULL){
+            tmp->next=tmp2->next;
+            tmp=tmp->next;
+            if(tmp!=NULL){
+                tmp2->next=tmp->next;
+                tmp2=tmp2->next;
+            }
+        }
+        return result;
     }
 };
