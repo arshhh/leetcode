@@ -1,25 +1,26 @@
-/*
-
-For some questions, the index is not starting from zero
-
-*/
-
 
 class Solution {
+    
 public:
     vector<int> twoSum(vector<int> &numbers, int target) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-        for(int i=0;i<numbers.size();i++){
-    for(int j=i+1;j<numbers.size();j++){
-		if(numbers[i]+numbers[j] == target){
-			vector<int> result;
-			result.push_back(i+1);
-			result.push_back(j+1);
-			return result;
-		}
-	}
-	}
-    }
-};
+    int n=numbers.size();
+    unordered_map<int,int> map;
 
+    vector<int> result;
+    for(int i=0;i<numbers.size();i++){
+        int n=target-numbers[i];
+        unordered_map<int,int>::iterator iter=map.find(n);
+        if(iter!=map.end()){
+           
+            result.push_back(iter->second+1);
+             result.push_back(i+1);
+            return result;
+        }else{
+            map.insert(pair<int,int>(numbers[i],i));
+        }
+    }
+	}
+    
+};
