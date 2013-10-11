@@ -12,64 +12,47 @@ public:
     vector<vector<int> > zigzagLevelOrder(TreeNode *root) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-        vector<vector<int> > res;
-    if(root==NULL)
-		return res;
-	deque<TreeNode*> level;
-	bool rightToLeft = true;
-	level.push_back(root);
-	vector<int> item;
-	item.push_back(root->val);
-	res.push_back(item);
-	item.clear();
-	while(!level.empty()){
-		int size = level.size();
-		if(rightToLeft){
-			for(int i=size-1;i>-1;i--){
-				TreeNode* node = level[i];
-				if(node->right!=NULL){
-					level.push_back(node->right);
-					item.push_back(node->right->val);
-				}
-				if(node->left!=NULL){
-					level.push_back(node->left);
-					item.push_back(node->left->val);
-				}		
-			}
-            if(item.size()>0){
-		    	res.push_back(item);
-			    item.clear();
-            }
-			//delete the previous information in level
-			for(int i=0;i<size;i++)
-				level.pop_front();
-			rightToLeft = false;
-		}else{
-			//left to right
-			for(int i=size-1;i>-1;i--){
-				TreeNode* node = level[i];
-				if(node->left!=NULL){
-					level.push_back(node->left);
-					item.push_back(node->left->val);
-				}
-				if(node->right!=NULL){
-					level.push_back(node->right);
-					item.push_back(node->right->val);
-				}
-			}
-            if(item.size()>0){
-			    res.push_back(item);
-			    item.clear();
-            }
-			for(int i=0;i<size;i++)
-				level.pop_front();
-			rightToLeft = true;
-		}//else
-
-		}
-
-	return res;
+     vector<vector<int> > result;
+        if(root==NULL)
+    return result;
+	//its children will be visited from right to left
+  	stack<TreeNode*> right_to_left;
+	//its children will be visited from left to right
+	stack<TreeNode*> left_to_right;
+	vector<int> level;
 	
+	right_to_left.push(root);
+	while(!right_to_left.empty() || !left_to_right.empty()){
+		level.clear();
+		if(!right_to_left.empty()){
+			while(!right_to_left.empty()){
+				TreeNode* node=right_to_left.top();
+				level.push_back(node->val);
+		
+				if(node->left){
+					left_to_right.push(node->left);
+				}
+			      if(node->right){
+					left_to_right.push(node->right);
+				}
+				right_to_left.pop();
+			}
+		}else{
+			while(!left_to_right.empty()){
+				TreeNode* node=left_to_right.top();
+				level.push_back(node->val);
+                if(node->right)
+					right_to_left.push(node->right);
+                if(node->left)
+				right_to_left.push(node->left);
+
+				left_to_right.pop();
+			}
+
+		}//else
+		result.push_back(level);
+	}
+	return result;
     }
 };
 
