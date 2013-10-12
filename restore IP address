@@ -3,32 +3,35 @@ public:
     //n is the traget partitions
 	vector<string> restore(string s, int n){
 		vector<string> res;
+		int size = s.size();
+		
+		if(size>n*3 || size<n)
+			return res;
 		if(n==1){
-			int size = s.size();
-            if(size>0 && size<=3 && atoi(s.c_str())<=255){
-                if(s[0]=='0' && size>1)
-                    return res;
-                res.push_back(s);   
-            }					           
+        		 if( s=="0" || (
+        		 size>=1 && size<=3 && s[0]!='0' && atoi(s.c_str())<=255 && ) ){
+        		 	res.push_back(s);   
+        		 }					           
 			return res;
 		}
-    //the length of part	
-    for(int i=1;i<=3;i++){
-	if(s.size()>i){
-		string ns=s.substr(0,i);
-		if(i==3 && stoi(ns)>255)
-			break;
-        if(ns.size()>1 && ns[0]=='0')
-            break;
-        vector<string> tmp = restore(s.substr(i),n-1);
-		if(tmp.size()>0){
-			for(int j=0;j<tmp.size();j++){
-				string ss=ns+"."+tmp[j];
-				res.push_back(ss);
+
+    		//the length of part	
+		 for(int i=1;i<=3;i++){
+			if(s.size()>i){
+				string ns=s.substr(0,i);
+				if(i>1 && ns[0]=='0')
+					break;
+				if(i==3 && stoi(ns)>255)
+					break;
+				vector<string> tmp = restore(s.substr(i),n-1);
+				if(tmp.size()>0){
+					for(int j=0;j<tmp.size();j++){
+						string ss=ns+"."+tmp[j];
+						res.push_back(ss);
+					}
 			}
-		}
-	}
-        }		
+		}//if
+	 	}		
 		return res;
 	}
 
