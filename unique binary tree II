@@ -9,60 +9,34 @@
  */
 class Solution {
 public:
+    //gengerate binary search trees with n numbers, and the first number is n
+    vector<TreeNode *> generateTrees(int n,int base){
+        vector<TreeNode*> result;
+        if(n==0){
+            result.push_back(NULL);
+        }
+        //different roots
+        for(int i=0;i<n;i++){
+            vector<TreeNode*> leftSet=generateTrees(i,base);
+            vector<TreeNode*> rightSet=generateTrees(n-i-1,base+i+1);
+            for(int j=0;j<leftSet.size();j++){
+                TreeNode* left=leftSet[j];
+                for(int k=0;k<rightSet.size();k++){
+                    TreeNode* right=rightSet[k];
+                    TreeNode* root=new TreeNode(i+base);
+                    root->left=left;
+                    root->right=right;
+                    result.push_back(root);
+                }
+            }
+            
+        }//for
+        return result;
+    }
 
-
-    TreeNode* copy(TreeNode* root){
-		 if(root==NULL)
-			 return (TreeNode*)NULL;
-		 TreeNode* new_root=new TreeNode(root->val);
-		 new_root->left=copy(root->left);
-		 new_root->right=copy(root->right);
-		 return new_root;
-	 }
-     
-    void addDiff(TreeNode* root, int n){
-		if(root==NULL)
-			return;
-		root->val += n;
-		addDiff(root->left,n);
-		addDiff(root->right,n);
-	}
-	void addDiff(vector<TreeNode*> res,int n){
-		for(int i=0;i<res.size();i++){
-			TreeNode* root = res[i];
-			addDiff(root,n);
-		}
-
-	}
     vector<TreeNode *> generateTrees(int n) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-	vector<TreeNode* > res;
-if(n==0){
-	res.push_back(NULL);
-	return res;
-}
-//root with i
-for(int i=1;i<=n;i++){
-	vector<TreeNode*> leftSet = generateTrees(i-1);
-	vector<TreeNode*> rightSet=generateTrees(n-i);
-	addDiff(rightSet,i);
-	for(int j=0;j<leftSet.size();j++){
-        
-		TreeNode* left = leftSet[j];
-        
-		for(int k=0;k<rightSet.size();k++){
-            
-			TreeNode* right=rightSet[k];
-            
-			TreeNode*  root = new TreeNode(i);
-			root->left=copy(left);
-			root->right=copy(right);
-			res.push_back(root);
-		}
-	}
-}
-return res; 
+        return generateTrees(n,1);
     }
 };
-
