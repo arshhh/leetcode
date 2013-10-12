@@ -13,7 +13,7 @@ public:
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
         if(root==NULL)
-    return true;
+		 return true;
 	if(root->left==NULL && root->right==NULL)
 		return true;
 	if(root->left!=NULL && root->right!=NULL){
@@ -25,26 +25,23 @@ public:
 			node_queue.pop();
 			TreeNode* right=node_queue.front();
 			node_queue.pop();
+			
 			if(left->val!=right->val)
 				return false;
-			if(left->left==NULL){
-				if(right->right!=NULL)
-					return false;
-			}else{
-				if(right->right==NULL)
-					return false;
+			if(left->left!=NULL && right->right!=NULL){
 				node_queue.push(left->left);
 				node_queue.push(right->right);
-			}
-			if(left->right==NULL){
-				if(right->left!=NULL)
-					return false;			
-			}else{
-				if(right->left==NULL)
-					return false;
+			}else if(left->left==NULL && right->right==NULL)
+				;
+			else
+				return false;
+			if(left->right!=NULL && right->left!=NULL){
 				node_queue.push(right->left);
 				node_queue.push(left->right);
-			}
+			}else if(left->right==NULL && right->left==NULL)
+				;
+			else
+				return false;
 		}//while
 		return true;
 	}else{
