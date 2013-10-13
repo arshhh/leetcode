@@ -1,95 +1,22 @@
-//it’s a little like permutation, sort the items first
-
-//the idea is to generate the subsets whose size increases from 1 to n
-
 class Solution {
 public:
-
-vector<int> getSubset(vector<int> &S,int start,int end,int length){
-    vector<int> set;
-	for(int i=start;i<start+length-1;i++)
-		set.push_back(S[i]);
-	set.push_back(S[end]);
-	return set;
-}
-//both the prefix and suffix need to be examined
-bool isPreValid(vector<int> &S,int start,int length){
-	bool valid=false;
-	//check prefix
-	if(start!=0){
-		int tmp=S[start-1];
-		for(int i=start;i<start+length-1;i++){
-			if(S[i]!=tmp){
-				return true;
-				break;
-}	
-		}
-return false;	
-	}else{
-		return true;
-}
-}
-//guarantee that there is no element whose value is the same as S[index] from start to //index-1
-bool isSufValid(vector<int> &S,int start,int index){
-	for(int i=start;i<index;i++){
-		if(S[i]==S[index])
-			return false;
-	}
-	return true;
-}
+    //startPos is the position we can add elements from. 
+    void getSubset(int startPos,vector<int> set,vector<vector<int> >& result,vector<int> &S){
+        result.push_back(set);
+        for(int i=startPos;i<S.size();i++){
+            if(i==startPos || (i>startPos && S[i]!=S[i-1]) ){
+                set.push_back(S[i]);
+                getSubset(i+1,set,result,S);
+                set.erase(set.end()-1);
+            }
+        }
+    }
     vector<vector<int> > subsetsWithDup(vector<int> &S) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-        vector<vector<int> > res;
-	//empty sub set
-	vector<int> empty_set;
-	res.push_back(empty_set);
-	if(S.empty())
-		return res;
-	//sort the elements in vector
-	std::sort(S.begin(),S.end());
-	int n=S.size();
-	queue<vector<int> > set_queue;
-	//stores the index of the last element in the set
-	queue<int>		index_queue;
-	//generate the subsets with size from 1 to n
-	for(int length=1;length<=n;length++){
-		if(length==1){
-			for(int i=0;i<n;i++){
-				if(i!=0&& S[i]==S[i-1])
-					continue;
-				vector<int> set;
-				set.push_back(S[i]);
-				set_queue.push(set);
-				index_queue.push(i);
-				res.push_back(set);
-			}
-		}else{
-int size=set_queue.size();
-while(size>0){
-	vector<int> old_set = set_queue.front();
-	int index = index_queue.front();
-	//add one elment to the old_set to generate new_set
-	for(int i=index+1;i<n;i++){
-		if(isSufValid(S,index+1,i)){
-			vector<int> new_set(old_set);
-			new_set.push_back(S[i]);
-			set_queue.push(new_set);
-			index_queue.push(i);
-			res.push_back(new_set);
-		}	
-	}
-	size--;
-	index_queue.pop();
-	set_queue.pop();
-}			
-
-		}//else
-	
-		}//for
-	
-	return res;	
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        vector<vector<int> > result;
+        vector<int> set;
+        sort(S.begin(),S.end());
+        getSubset(0,set,result,S);
+        return result;
     }
 };
-
-
