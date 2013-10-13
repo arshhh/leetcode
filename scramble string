@@ -14,31 +14,22 @@ public:
     
         //start from length 1
         for(int length=1;length<=n;length++){
-        	for(int i=0;i<n;i++){
-        		for(int j=0;j<n;j++){
+        	for(int i=0;i+length-1<n;i++){
+        		for(int j=0;j+length-1<n;j++){
         			if(length==1){
-        				if(s1[i]==s2[j])
-        					valid[i][j][1]=true;
-        				else
-        					valid[i][j][1]=false;
-        			
+        					valid[i][j][1]=(s1[i]==s2[j]);
         			}else{
-        				if(i+length>n || j+length>n)
-        					valid[i][j][length]=false;
-        				else{
+        			      valid[i][j][length]=false;
         				  for(int l=1;l<length;l++){
-        					
         					if( (valid[i][j][l]&&valid[i+l][j+l][length-l]) ||
         						(valid[i][j+length-l][l] && valid[i+l][j][length-l]) ){
         						valid[i][j][length]=true;
                                 break;
-        					}        
-        				    
-        				    valid[i][j][length]=false;
-        				    }
-        				}
+        					}//if        
+        				    }//for
+        				
         		
-        			}
+        			}//else
         		
         		
         		}
