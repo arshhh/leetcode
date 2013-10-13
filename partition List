@@ -13,38 +13,22 @@ public:
         // DO NOT write int main() function
         if(head==NULL)
             return head;
-        ListNode* iter=head;
-    	//pos->next->val >=x
-		ListNode* pos=NULL;
-        //find the first iter whose value is greate or euqal to x
-        while(iter!=NULL){
-            if(iter->val<x){
-                pos=iter;
-                iter=iter->next;
+        ListNode* h1=new ListNode(-1);
+        ListNode* h2=new ListNode(-1);
+        ListNode* t1=h1;
+        ListNode* t2=h2;
+        while(head){
+            if(head->val<x){
+                t1->next=head;
+                t1=head;
             }else{
-                break;
+                t2->next=head;
+                t2=head;
             }
-            
+            head=head->next;
         }
-            
-		while(iter!=NULL && iter->next!=NULL){
-			if(iter->next->val<x){
-				ListNode* next=iter->next;
-                iter->next=iter->next->next;
-				if(pos==NULL){
-					//insert at head			
-					next->next=head;
-					head=next;
-					pos=next;
-				}else{
-					next->next=pos->next;
-					pos->next=next;
-					pos=next;
-				}
-			}else{
-			    iter=iter->next;
-			}
-		}//while
-	return head;
+        t1->next=h2->next;
+       t2->next=NULL; //very important
+    	return h1->next;
     }
 };
