@@ -1,41 +1,64 @@
 class Solution {
 public:
+
+    void buildHistogram(vector<vector<char> >&matrix,vector<vector<int> >& t){
+        int rows=matrix.size();
+        int cols=matrix[0].size();
+        for(int j=0;j<cols;j++)
+            if(matrix[0][j]=='0')
+                t[0][j]=0;
+            else
+                t[0][j]=1;
+        for(int i=1;i<rows;i++){
+            for(int j=0;j<cols;j++){
+               if(matrix[i][j]=='0')
+                    t[i][j]=0;
+                else
+                    t[i][j]=1+t[i-1][j];
+            }
+        }
+    }
+    int maximalRectangle(vector<int> t){
+        int n=t.size();
+        stack<int> s;
+        int m=0;
+        int i=0;
+        while(i<n){
+            if(s.empty()){
+                s.push(i);
+                i++;
+                continue;
+            }
+            int index=s.top();
+            if(t[i]>=t[index]){
+                s.push(i);
+                i++;
+            }
+            else{
+                s.pop();
+                int area=s.empty()? (i)*t[index] : (i-s.top()-1)*t[index];
+                m=max(m,area);
+            }
+        }//while
+        return m;
+        
+    }
     int maximalRectangle(vector<vector<char> > &matrix) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-        int m=matrix.size();
-
-    if(m==0)
-		return 0;
-	int n=matrix[0].size();
-	if(n==0)
-		return 0;
-	int max=0;
-	for(int i=0;i<m;i++){
-		for(int j=0;j<n;j++){
-			if(matrix[i][j]=='0')
-				continue;
-			int max_col=n;
-			if( (m-i)*(n-j)<=max)
-				continue;
-			for(int row=i;row<m;row++){
-				if(matrix[row][j]=='0')
-					break;
-				for(int col=j;col<max_col;col++){
-					if(matrix[row][col]=='0'){
-						max_col=col;
-						break;
-					}
-						
-					int area=(row-i+1)*(col-j+1);
-					max = max > area ? max : area;
-				}//for
-
-			}//for
-
-		}//for
-
-	}//for
-	return max;
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        int rows=matrix.size();
+        if(rows==0)
+            return 0;
+        int cols=matrix[0].size();
+        if(cols==0)
+            return 0;
+        //t[i][j] means the size of the histogram based on row i, col j 
+        vector<vector<int> > t(rows,vector<int>(cols+1));
+        buildHistogram(matrix,t);
+        int m=0;
+        for(int i=0;i<rows;i++){
+            t[i][cols]=0;
+            m=max(m,maximalRectangle(t[i]));
+        }
+        return m;
     }
 };
