@@ -23,20 +23,14 @@ public:
         stack<int> s;
         int m=0;
         int i=0;
+        int tp;
         while(i<n){
-            if(s.empty()){
-                s.push(i);
-                i++;
-                continue;
-            }
-            int index=s.top();
-            if(t[i]>=t[index]){
-                s.push(i);
-                i++;
-            }
-            else{
+            if(s.empty() || t[s.top()]<=t[i]){
+                s.push(i++);
+            }else{
+                tp=s.top();
                 s.pop();
-                int area=s.empty()? (i)*t[index] : (i-s.top()-1)*t[index];
+                int area=s.empty()? (i)*t[tp] : (i-s.top()-1)*t[tp];
                 m=max(m,area);
             }
         }//while
