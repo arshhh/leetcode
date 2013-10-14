@@ -1,43 +1,22 @@
 class Solution {
 public:
+    //startPos is the position we can add elements from. 
+    void getSubset(int startPos,vector<int> set,vector<vector<int> >& result,vector<int> &S){
+        result.push_back(set);
+        for(int i=startPos;i<S.size();i++){
+           
+                set.push_back(S[i]);
+                getSubset(i+1,set,result,S);
+                set.pop_back();
+            
+        }
+    }
     vector<vector<int> > subsets(vector<int> &S) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-vector<vector<int> > res;
-vector<int> set;
-res.push_back(set);
-int n=S.size();
-if(n==0)
-return res;
-sort(S.begin(),S.end());
-queue<vector<int> > set_queue;
-queue<int> index_queue;
-//process len=1
-for(int i=0;i<n;i++){
-    vector<int> new_set;
-	new_set.push_back(S[i]);
-	res.push_back(new_set);
-	set_queue.push(new_set);
-    index_queue.push(i);
-}
-for(int len=2;len<=n;len++){
-	int size=set_queue.size();
-	for(int i=0;i<size;i++){
-		vector<int> old_set=set_queue.front();
-        int index = index_queue.front();
-		
-		for(int j=index+1;j<n;j++){
-			vector<int> new_set(old_set);
-			new_set.push_back(S[j]);
-			res.push_back(new_set);
-			set_queue.push(new_set);
-            index_queue.push(j);
-		}
-		set_queue.pop();
-        index_queue.pop();
-	}
-} 
-return res;       
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        vector<vector<int> > result;
+        vector<int> set;
+        sort(S.begin(),S.end());
+        getSubset(0,set,result,S);
+        return result;
     }
 };
-
