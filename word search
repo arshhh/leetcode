@@ -1,23 +1,19 @@
 class Solution {
 public:
-    bool search(vector<vector<char> > &board,string word,int row,int col,int nRow,int nCol){
-		if(word[0]!=board[row][col])
+    bool search(vector<vector<char> > &board,int k, string word,int row,int col,int nRow,int nCol){
+		if(k==word.size())
+		    return true;
+		if(row<0 || row>=nRow || col<0 || col>=nCol || board[row][col]=='0' || word[k]!=board[row][col])
 			return false;
-        if(word.size()==1)
-            return true;
+		int dx[4]={0,0,1,-1};
+		int dy[4]={1,-1,0,0};
+		
 		char tmp = board[row][col];
 		board[row][col]='0';
-		if(col+1<nCol && board[row][col+1]!='0' && search(board,word.substr(1),row,col+1,nRow,nCol) )
-			return true;
-		if(col-1>-1 && board[row][col-1]!='0' &&
-search(board,word.substr(1),row,col-1,nRow,nCol) )
-			return true;
-		if(row-1>-1 && board[row-1][col]!='0' &&
-search(board,word.substr(1),row-1,col,nRow,nCol) )
-			return true;
-if(row+1<nRow && board[row+1][col]!='0' &&
-search(board,word.substr(1),row+1,col,nRow,nCol) )
-			return true;
+		for(int i=0;i<4;i++){
+		    if(search(board,k+1,word,row+dx[i],col+dy[i],nRow,nCol))
+		        return true;
+		}
 		board[row][col] = tmp;
 		return false;
 	}
@@ -33,7 +29,7 @@ search(board,word.substr(1),row+1,col,nRow,nCol) )
 	int nCol = board[0].size();
 	for(int i =0;i<nRow;i++){
 		for(int j=0;j<nCol;j++){
-			if(search(board,word,i,j,nRow,nCol))
+			if(search(board,0,word,i,j,nRow,nCol))
 				return true;
 		}	
     }
