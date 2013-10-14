@@ -1,0 +1,65 @@
+class Solution {
+public:
+    void getInfo(int& unmatched,int count[],int needed[],string T){
+        int n=T.size();
+        for(int i=0;i<n;i++){
+            if(count[T[i]]==0){
+                unmatched++;
+            }
+            count[T[i]]++;
+            needed[T[i]]++;
+        }
+    }
+    string minWindow(string S, string T) {
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        int n1=S.size();
+        int n2=T.size();
+        if(n1<n2 || n2==0)
+            return "";
+        int unmatched=0; // the unmatched distinct characters in T
+        int count[256]={0}; //the number needed of character in T
+        int needed[256]={0}; //the need characters in T
+        getInfo(unmatched,count,needed,T);
+        int s=0;//start position of the sliding window
+        int e=0; //the inclusive end of the sliding window
+        int len=INT_MAX;
+        string result="";
+        while(s<n1){
+            if(needed[S[s]]==0)
+                s++;
+            else
+                break;
+        }
+        if(s==n1){
+            return result;
+        }
+        for(e=s;e<n1;e++){
+            if(needed[S[e]]==0)
+                continue;
+            count[S[e]]--;
+            if(count[S[e]]==0)
+                unmatched--;
+             //try to find the minimum result
+            while(unmatched==0){
+                if(e-s+1<len){
+                    len=e-s+1;
+                    result=S.substr(s,len);
+                }
+                //move s to next available postion
+                if(count[S[s]]==0)
+                    unmatched++;
+                count[S[s]]++;
+                s++;
+                while(s<=e){
+                    if(needed[S[s]]==0)
+                        s++;
+                    else 
+                        break;
+                }
+                if(s>e)
+                    return result;
+            }//while
+        }
+        return result;
+    }
+};
