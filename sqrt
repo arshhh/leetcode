@@ -1,44 +1,19 @@
-/*
-
-You should consider the limitation of data types, this takes me a lot of time. and using C++ funciton to 
-find out the maximum value.
-
-*/
-
 class Solution {
 public:
     int sqrt(int x) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-	if(x<=0)
-		return 0;
-       	 int high = x/2+0.5;
-	int low = 1;
-	int mid = 1;
-	int root = 1;
-	bool exceed = false;
-	int max = numeric_limits<int>::max();
-	while(low<=high){
-		mid = (low+high)/2;
-		//overflow
-		if(mid>max/mid){
-			high = mid -1;
-			exceed = true;
-			continue;
-		}
-		int val = mid*mid;
-		if(val == x)
-			return mid;
-		else if(val<x){
-			low = mid+1;
-			exceed = false;
-		}
-		else{
-			high = mid-1;
-			exceed = true;
-		}
-	}
-	return exceed? mid-1 : mid;
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        int low=1;
+        int high=(double)x/2+0.5;
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            int div=x/mid;
+            if(div==mid)
+                return mid;
+            else if(div<mid){
+                high=mid-1;
+            }else
+                low=mid+1;
+        }
+        return high;
     }
 };
-
