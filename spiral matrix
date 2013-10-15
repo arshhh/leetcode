@@ -8,30 +8,26 @@ public:
 	vector<vector<int> > matrix(n,vector<int>(n));
 	for(int i=0;i<layers;i++){
 		//j is the number of items
-		//top 5-2-1=2 i==2 
-		if(layers==1 || (i==layers-1 && layers>2 ){
-			matrix[i][i]=num;
-			break;
-		}
-		for(int j=0;j<n-2*i-1;j++){
-			matrix[i][i+j]=num;
-			num++;
+		matrix[i][i]=num++;
+	
+		//top row 
+		for(int j=1;j<n-2*i;j++){
+			matrix[i][i+j]=num++;
 		}
 		//right
-		for(int j=0;j<n-2*i-1;j++){
-			matrix[i+j][n-1-i]=num;
-			num++;
+		for(int j=1;j<n-2*i;j++){
+			matrix[i+j][n-1-i]=num++;
+		
 		}
 		//down
-		for(int j=0;j<n-2*i-1;j++){
-			matrix[n-1-i][n-1-i-j]=num;
-			num++;
+		for(int j=n-2-i;j>=i;j--){
+			matrix[n-1-i][j]=num++;
+	
 		}
 		//left
-		for(int j=0;j<n-2*i-1;j++){
-			matrix[n-1-i-j][i]=num++;
+		for(int j=n-2-i;j>=i+1;j--){
+			matrix[j][i]=num++;
 		}
-	
 	}
 	return matrix;
     }
