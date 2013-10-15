@@ -9,47 +9,25 @@ then it must can't reach the end.
 
 class Solution {
 public:
-    bool canJump(int A[],int pos,int n,bool* table){
-    int step = A[pos];
-	for(int i=step;i>=1;i--){
-		if(pos+i>=n-1){
-			return true;
-		}
-		if(table[pos+i]==false){
-			continue;
-		}
-		else{
-            if(i<step && pos+i+A[pos+i]<=pos+step+A[pos+step]){
-                table[pos+i]=false;
-            }
-            else{     
-		    	bool res = canJump(A,pos+i,n,table);
-		    	    if(res==true)
-				return true;
-    			table[pos+i]=false;	
-            }
-		}
-	}
-	table[pos] = false;
-	return false;
-	}
-void init(bool* table,int n){
-	for(int i=0;i<n;i++)
-		table[i]=true;
-}
+
     bool canJump(int A[], int n) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-	//DP table
-	if(n==0)
-		return false;
-        if(n==1)
-	return true;
-	// false means can't jump on that position, we don't need true information
-	bool* table = new bool[n];
-	init(table,n);
-	//n >=2
-return canJump(A,0,n,table);
+        bool table[n];
+        table[n-1]=true;
+        for(int i=n-2;i>-1;i--){
+            if(i+A[i]>=n-1)
+                table[i]=true;
+            else{
+                table[i]=false;
+                for(int j=A[i];j>=1;j--)
+                    if(table[i+j]){
+                        table[i]=true;
+                        break;
+                    }
+            }
+        }
+        return table[0];
     }
 };
 
