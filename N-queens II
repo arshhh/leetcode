@@ -1,0 +1,31 @@
+class Solution {
+public:
+
+    
+    bool isValid(int A[],int r){
+        for(int i=0;i<r;i++){
+            if(A[i]==A[r])
+                return false;
+            if(abs(A[i]-A[r])==(r-i))
+                return false;
+        }
+        return true;
+    }
+    int queens(int r,int A[],int n){
+        if(r==n)
+            return 1;
+        int result=0;
+        for(int i=0;i<n;i++){
+            A[r]=i;
+            if(isValid(A,r)){
+                result+=queens(r+1,A,n);
+            }
+        }
+        return result;
+    }
+    int totalNQueens(int n) {
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        int A[n];
+        return queens(0,A,n);
+    }
+};
