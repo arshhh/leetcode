@@ -1,0 +1,20 @@
+class Solution {
+public:
+    double pow(double x, int n) {
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        bool neg=false;
+        if(n<0){
+            neg=true;
+            n=-n;
+        }
+        double t=x;
+        double result=1;
+        while(n){
+            if(n&1)
+                result*=t;
+            n>>=1;
+            t*=t;
+        }
+        return neg ? 1/result : result;
+    }
+};
