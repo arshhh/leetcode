@@ -1,61 +1,25 @@
-/*
-I don't know if this method is good. Each time, a new element is inserted into the permutation with n length, thus there 
-are n+1 positions available. If the new element is the same with the old one, it won't be inserted after the old ele-
-ments's.
-
-*/
-
 class Solution {
 public:
-    void delDup(vector<vector<int> >& res){
-        vector<vector<int> >::iterator iter1;
-        vector<vector<int> >::iterator iter2;
-        for(iter1=res.begin();iter1<res.end();iter1++){
-            for(iter2=iter1+1;iter2<res.end();iter2++){
-                if(*iter1 == *iter2){
-                    res.erase(iter2);
-                }
+    void permute(vector<vector<int> >& result,vector<int> num,int p){
+        if(p==num.size()-1){
+            result.push_back(num);
+            return;
+        }
+        permute(result,num,p+1);
+        set<int> s;
+        for(int i=p+1;i<num.size();i++){
+            if(num[i]!=num[p] && s.find(num[i])==s.end() ){
+                swap(num[p],num[i]);
+                permute(result,num,p+1);
+                swap(num[p],num[i]);
+                s.insert(num[i]);
             }
-            
-        }   
-        
+        }
     }
     vector<vector<int> > permuteUnique(vector<int> &num) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-        vector<vector<int> > res;
-    int size = num.size();
-	if(size==0)
-		return res;
-	//size>=1
-	vector<int> p;
-	p.push_back(num[0]);
-	res.push_back(p);
-	if(size == 1){
-		return res;
-	}
-	for(int i=1;i<size;i++){
-		int val = num[i];
-		vector<vector<int> > resTmp;
-		for(int j=0;j<res.size();j++){
-			vector<int> p = res[j];
-			vector<int>::iterator iter=p.begin();
-			vector<int> pp = p;
-			pp.insert(pp.begin(),val);
-			resTmp.push_back(pp);
-			for(;iter<p.end();iter++){
-				if(*iter!=val){
-					pp = p;
-					pp.insert(pp.begin()+(iter-p.begin())+1,val);
-					resTmp.push_back(pp);
-				}
-			}//for	
-		}//for
-        //delete the duplicate ones
-        delDup(resTmp);
-		res = resTmp;
-	}
-	return res;
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        vector<vector<int> > result;
+        permute(result,num,0);
+        return result;
     }
 };
-
