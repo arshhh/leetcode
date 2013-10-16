@@ -1,28 +1,19 @@
 class Solution {
 public:
-    vector<vector<int> > permute(vector<int> &num) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-        int size = num.size();
-    vector<vector<int> > res;
-	if(size==0)
-		return res;
-	for(int i=0;i<size;i++){
-		vector<int> tmp = num;
-		int val = tmp[i];
-		tmp.erase(tmp.begin()+i);
-		vector<vector<int> > res1 = permute(tmp);
-        if(res1.size() == 0){
-            vector<int> t;
-            t.push_back(val);
-            res.push_back(t);
-        }else{
-		    for(int j=0;j<res1.size();j++){
-		    	res1[j].push_back(val);
-		    	res.push_back(res1[j]);
-		}
+    void permute(vector<vector<int> >& result,vector<int> num,int p){
+        if(p==num.size()-1){
+            result.push_back(num);
+            return;
         }
-	}
-	return res;
+        for(int i=p;i<num.size();i++){
+            swap(num[p],num[i]);
+            permute(result,num,p+1);
+        }
+    }
+    vector<vector<int> > permute(vector<int> &num) {
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        vector<vector<int> > result;
+        permute(result,num,0);
+        return result;
     }
 };
