@@ -1,86 +1,31 @@
 class Solution {
 public:
-   string add(string num1,string num2){
-    	//padding zero
-	int n1=num1.size();
-	int n2=num2.size();
-	int n=max(n1,n2);
-	string pad(abs(n1-n2),'0');
- //   return pad;
-	if(n1<n2)
-		num1=pad+num1;
-	else
-		num2=pad+num2;
-	int carry=0;
-	string res="";
-	for(int i=n-1;i>-1;i--){
-		int  t = (num1[i]-'0')+(num2[i]-'0')+carry;
-		carry = t>=10 ? 1 : 0;
-		t = t>0 ? t%10 : 0;
-        char c=  (char)(t+int('0'));
-        string tmp=string(1,c);
-      //  return tmp;
-		res = tmp + res;
-      
-	}
-	return carry ? '1'+res : res;
-
-}
-string multiply(string num1,char num2){
-    if(num1=="0" || num2=='0')
-        return "0";
-    if(num2=='1')
-        return num1;
-    if(num1=="1")
-        return string(1,num2);
-     
-	int carry=0;
-	int n2=num2-'0';
-	if(n2==0)
-		return "0";
-	if(n2==1)
-		return num1;
-	string res;
-	for(int i=num1.size()-1;i>-1;i--){
-		int t=(num1[i]-'0')*n2+carry;
-		carry=t/10;
-		t %=10;
-        char c='0'+t;
-        string tmp=string(1,c);
-		res = tmp+res;
-	
-	}
-	return carry ? char('0'+carry)+res : res;
-
-}
     string multiply(string num1, string num2) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-	int n1=num1.size();
-	int n2=num2.size();
-    if(n1==0)
-        return num2;
-    if(n2==0)
-        return num1;
-    int sign=1;
-    if(num1[0]=='-'){
-        sign*=-1;
-        num1=num1.substr(1);
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        int n1=num1.size();
+        int n2=num2.size();
+        if(num1=="0" || num2=="0")
+            return "0";
+        vector<int> result(n1+n2,0);
+        int carry=0;
+        for(int i=n1-1;i>-1;i--){
+            int d1=num1[i]-'0';
+            carry=0;
+            for(int j=n2-1;j>-1;j--){
+                int d2=num2[j]-'0';
+                result[i+j+1]+=(d1*d2+carry);
+                carry=result[i+j+1]/10;
+                result[i+j+1]%=10;
+            }
+            result[i]+=carry;
+        }
+        string res="";
+        for(int i=0;i<n1+n2;i++){
+            if(i==0 && result[i]==0)
+                continue;
+            char t=result[i]+'0';
+            res+=t;
+        }
+        return res;
     }
-    if(num2[0]=='-'){
-        sign*=-1;
-        num2=num2.substr(1);
-    }
-	string result="0";
-	for(int i=n1-1;i>-1;i--){
-		string tmp=multiply(num2,num1[i]);
-		string pad(n1-1-i,'0');
-        if(tmp!="0")
-	    	tmp = tmp+pad;
-       
-		result = add(result,tmp);		
-	}
-	return sign ? result : "-"+result;
-         }
 };
-
