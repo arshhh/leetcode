@@ -10,9 +10,10 @@ I find the optimal position every time.BUt I don't know if it's faster!
 
 class Solution {
 public:
-    vector<char> getChoices(vector<vector<char> > &board,int i,int j,int n){
+    vector<char> getChoices(vector<vector<char> > &board,int i,int j){
+        int n=9;
         vector<char> result;
-        		bool* table = new bool[n];
+        bool* table = new bool[9];
 		for(int k=0;k<n;k++)
 			table[k]=true;
 		for(int k=0;k<n;k++){
@@ -35,46 +36,25 @@ public:
 		}
 		return result;
 	}
-    
-    vector<char> getOptimalPos(vector<vector<char> > &board,int &row,int &col,int n){
-        int min = n+1;
-        vector<char> choices;
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-                if(board[i][j] == '.'){
-                    vector<char> tmp = getChoices(board,i,j,n);
-                    if(tmp.size() == 0){
-                        row=-1;
-                        col=-1;
-                        return choices;
-                    }
-                        
-                    if(tmp.size()<min){
-                        min = tmp.size();
-                        choices = tmp;
-                        row=i;
-                        col=j;
-                    }
-                }
-                
-            }
-            
-        }
-        return choices;      
-    }
+	
 bool solve(vector<vector<char> > &board,int k){
     if(k==81)
-        return;
+        return true;
     int i=k/9;
     int j=k%9;
-    while(true){
-        if(board[i][j]!='.')
-            solve(board,k+1);
-        else
-            break;
+ 
+    if(board[i][j]!='.'){
+        return solve(board,k+1);
     }
-    vector<char>
-   
+    
+    vector<char> choices=getChoices(board,i,j);
+    for(int l=0;l<choices.size();l++){
+        board[i][j]=choices[l];
+        if(solve(board,k+1))
+            return true;
+        board[i][j]='.';
+    }
+    return false;
 }	
     void solveSudoku(vector<vector<char> > &board) {
         // Start typing your C/C++ solution below
