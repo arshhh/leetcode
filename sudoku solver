@@ -62,29 +62,24 @@ public:
         }
         return choices;      
     }
-bool solve(vector<vector<char> > &board,int n){
-    int row=0;
-    int col=0;
-    vector<char> choices = getOptimalPos(board,row,col,n);
-    if(row==-1)
-        return false;
-    if(choices.size()==0)
-        return true;
-    for(int k=0;k<choices.size();k++){
-    		board[row][col]=choices[k];
-		if(solve(board,n)){
-			return true;
-		}else{
-			board[row][col]='.';
-		}
-	}  
-    return false;
+bool solve(vector<vector<char> > &board,int k){
+    if(k==81)
+        return;
+    int i=k/9;
+    int j=k%9;
+    while(true){
+        if(board[i][j]!='.')
+            solve(board,k+1);
+        else
+            break;
+    }
+    vector<char>
+   
 }	
     void solveSudoku(vector<vector<char> > &board) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-        int n = board.size();
-	solve(board,n);
+    	solve(board,0);
     }
 };
 
