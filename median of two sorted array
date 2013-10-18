@@ -1,57 +1,57 @@
 class Solution {
 public:
-    double findMedianSortedArrays(int A[], int m, int B[], int n) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-        int size = m+n;
-    if(size%2 == 0){
-	int target = size/2-1;
-	int j=0;
-	int k=0;
-	int tmp=0;
-	double sum = 0;
-	for(int i=0;i<size;i++){
-if(j>m-1){
-			tmp=B[k];
-			k++;
-		}else if(k>n-1){
-			tmp=A[j];
-			j++;
-		}else if(A[j] < B[k]){
-			tmp = A[j];
-j++;	
-}else{
-	tmp = B[k];
-	k++;
-}
-if(i==target || i ==(target+1))
-sum+=tmp;	
+ 	
+   int findKth(int A[],int m,int B[],int n,int left,int right,int k){
+	if(left>right){
+		left=max(0,k-m-1);
+		right=min(k-1,n-1);
+		return findKth(B,n,A,m,left,right,k);
 	}
-	return sum/2;
+	int mid=(left+right)/2;
+	int j=k-mid-2;
+	if(j==-1){
+		if(A[mid]<=B[0])
+			return A[mid];
+		else
+			return findKth(A,m,B,n,left,mid-1,k);
+	}else if(j==n-1){
+		if(A[mid]>=B[j])
+			return A[mid];
+		else
+			return findKth(A,m,B,n,mid+1,right,k);
 	}else{
-		int target = size/2;
-		int j=0;
-		int k=0;
-		double tmp=0;
-	for(int i=0;i<size;i++){
-		if(j>m-1){
-			tmp=B[k];
-			k++;
-		}else if(k>n-1){
-			tmp=A[j];
-			j++;
-		}else if(A[j] < B[k]){
-			tmp = A[j];
-j++;	
-}else{
-	tmp = B[k];
-	k++;
-}
-if(i==target)
-return tmp;	
+		if(A[mid]>=B[j] && A[mid]<=B[j+1])
+			return A[mid];
+		else if(A[mid]<B[j])
+			return findKth(A,m,B,n,mid+1,right,k);
+		else
+			return findKth(A,m,B,n,left,mid-1,k);
 	}
+}
+    double findMedianSortedArrays(int A[], int m, int B[], int n) {
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+	if(m==0 && n==0)
+		return 0;
+if(m==0){
+		return n%2==0 ? double(B[n/2]+B[n/2-1])/2 : B[n/2];
+	}
+	if(n==0)
+		return m%2==0 ? double(A[m/2]+A[m/2-1])/2 : A[m/2];
+	int c=m+n;
+	if(c%2==0){
+		int k1=c/2; //k is 1-based
+		int k2=c/2+1;
+		int left1=max(0,k1-n-1);
+		int left2=max(0,k2-n-1);
+		int right1=min(k1-1,m-1);
+		int right2=min(k2-1,m-1);
 
-	}//else
-    }
+		return (findKth(A,m,B,n,left1,right1,k1)+findKth(A,m,B,n,left2,right2,k2))/2.0;
+    }else{
+    	int k=c/2+1;
+	    int left=max(0,k-n-1);	
+	    int right=min(k-1,m-1);
+	    return findKth(A,m,B,n,left,right,k);
+         }
+}    
 };
-
