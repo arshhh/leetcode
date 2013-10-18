@@ -10,14 +10,13 @@ public:
                     j=mid-1;
                 else
                     i=mid+1;
-            }else if(A[i]==A[mid]){
-               i++;
-            }else{
+            }else if(A[i]>A[mid]){
                 if(target>A[mid] && target<=A[j])
                     i=mid+1;
                 else
                     j=mid-1;
-            }
+            }else
+                i++;
         }
         return false;
     }
