@@ -1,10 +1,6 @@
 class Solution {
 public:
-void swap(vector<int> &num,int i,int j){
-    int tmp = num[i];
-	num[i] = num[j];
-	num[j] = tmp;
-}
+
     void nextPermutation(vector<int> &num) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
@@ -17,32 +13,15 @@ void swap(vector<int> &num,int i,int j){
 		//find the elment which is greater than num[i] 
 		for(int j=size-1;j>i;j--){
 			if(num[j]>num[i]){
-				//first time
-				if(index == i){
-					next = num[j];
-					index = j;
-				}else{
-					if(num[j]<next){
-					next = num[j];
-					index = j;
-					}
-				}	
-            }	
-		}//for
-		//if found
-		if(index!=i){
-			swap(num,i,index);
-            //swap again
-            for(int k=i+1;k<(size+i+1)/2;k++)
-                swap(num,k,size-1-(k-i-1));
-            
-			return;
-		}
+				swap(num[j],num[i]);
+				reverse(num.begin()+i+1,num.end());
+				return;
+			}
+            	}	
+
 
 	}//outer for loop
-	//reverse the array
-	for(int i=0;i<size/2;i++)
-		swap(num,i,size-i-1);
+	reverse(num.begin(),num.end());
 	return;
     }
 };
