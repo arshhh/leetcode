@@ -16,24 +16,24 @@ public:
 		return size;
 	int length = 0;
     int i=0;
-    bool t[26]={false};
+    int t[26]={-1};
     //test string endding at index j 
 	for(int j=0;j<size;j++){
-        //test if repeated
-        if(t[s[j]-'a']==false){
-            t[s[j]-'a']=true;
+        //test if repeated, -1 means it doesn't appear in it
+        int k=t[s[j]-'a'];
+        if(k==-1){
+            t[s[j]-'a']=j;
             continue;
         }
         //update length
-        length=length > j-i ? length : j-i;
-        while(s[i]!=s[j]){
-            t[s[i]-'a']=false;
+        length=length > j-k ? length : j-k;
+        while(i<=k){
+            t[s[i]-'a']=-1;
             i++;
         }
-        i++;
 	}
-    length = max(length,size-i);
 	
+    length = max(length,size-i);
     return length;
     }
 };
