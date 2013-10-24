@@ -1,73 +1,40 @@
-/* 
-
-can't pass the large tests
-
-*/
-
-
 class Solution {
 public:
 
-    bool isPalindrome(string s,int i, int j){
-        while(j>i){
-			if(s[j] == s[i]){
-				i++;
-				j--;
-			}
-else{
-				return false;
-}	
-		}
-		return true;
-	}
 
     string longestPalindrome(string s) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
         int n = s.size();
-        if(n==0 || n==1)
-        	return s;
-        int len=1;
-        string res=s.substr(0,1);
-	//single center
-	for(int i=0;i<n;i++){
-		for(int j=i-1,k=i+1;j>-1 && k<n;j--,k++){
-			if(s[j]==s[k]){
-				int tmp=(i-j)*2+1;
-				if(tmp>len){
-					len=tmp;
-					res=s.substr(j,len);
-				}//if
-			}//if
-			else{
-				break;
-			}
-		}
-	}
-	//center with two characters, i and i+1 are the centers
-	for(int i=0;i<n-1;i++){
-		if(s[i]!=s[i+1])
-			continue;
-        //update
-        if(len<2){
-            len=2;
-            res=s.substr(i,2);
+         int m=2*n+1;
+        string t(m,'#');
+        for(int i=0;i<n;i++){
+            t[2*i+1]=s[i];
         }
-		for(int j=i-1,k=i+2;j>-1 && k<n;j--,k++){
-			if(s[j]==s[k]){
-				int tmp=(i-j)*2+2;
-				if(tmp>len){
-					len=tmp;
-					res=s.substr(j,len);
-				}
-                
-			}else{
-    		 break;   
-			}
-		
-		}	
-	}//for		
-	return res;
+       
+        int p[m];
+        int c=0;
+        int r=0;
+        string res;
+        int center=0;
+        int len=0;
+        for(int i=1;i<m;i++){
+            int ii=2*c-i;
+            p[i] = i>=r ? 0 : min(r-i,p[ii]);
+            //very smart process method, because we try to add one to p[i]
+            while(t[i+p[i]+1]==t[i-p[i]-1])
+                p[i]++;
+            if(i+p[i]>r){
+                c=i;
+                r=i+p[i];
+            }
+            if(p[i]>len){
+                center=i;
+                len=p[i];
+            }
+        }
+  
+        return s.substr((center-len+1)/2,len);
     }
 };
 
