@@ -18,10 +18,12 @@ public:
                     if(sum==target){
                         result.push_back({num[i],num[j],num[lo],num[hi]});
                         //ignore duplicates
-                        while(lo<hi && num[lo]==num[lo+1])
+                        do{
                             lo++;
-                        while(lo<hi && num[hi-1]==num[hi])
+                        }while(lo<hi && num[lo]==num[lo-1]);
+                        do{
                             hi--;
+                        } while(lo<hi && num[hi+1]==num[hi]);
                     }else if(sum<target)
                         lo++;
                     else
