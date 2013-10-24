@@ -1,17 +1,3 @@
-/*
-
-If you want to change the value of a pointer through parameters, you should use function A(int* & p), i.e., the reference,
-otherwise the value of the pointer won't be changed! Only the value the pointer points to will be modified without the 
-reference. 
-
-
-when reversing link, you should keep in mind: pre, cur, next, Before you change the nexr of cur, you should store
-it's next in next, if the task is to reverse the link from a specified position, then there should be a parent pointer.
-*/
-
-
-
-
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -22,42 +8,34 @@ it's next in next, if the task is to reverse the link from a specified position,
  */
 class Solution {
 public:
-    int getSize(ListNode* head){
-    	int size=0;
-		while(head!=NULL){
-			head=head->next;
-			size++;
-		}
-		return size;
-	}
-	ListNode* reverseGroup(ListNode*& head,ListNode* parent,ListNode*& cur,int k){
-		ListNode* pre=NULL;
-		ListNode* new_tail=cur;
-		for(int i=0;i<k;i++){
-			ListNode* next=cur->next;
-			cur->next=pre;
-			pre=cur;
-			cur=next;
-		}
-        if(parent!=NULL){
-	    	parent->next = pre;
-        }else{
-            head = pre;
+    ListNode *reverse(ListNode* pre,int k){
+        ListNode* head=pre->next;
+        while(--k){
+            ListNode* item=head->next;
+            head->next=head->next->next;
+            item->next=pre->next;
+            pre->next=item;
         }
-		new_tail->next=cur;
-		return new_tail;
-	}
+        return head;
+    }
     ListNode *reverseKGroup(ListNode *head, int k) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-        int size = getSize(head);
-		int count = size/k;
-		ListNode* parent=NULL;
-		ListNode* cur = head;
-		 for(int i=0;i<count;i++){
-			//reverse list from cur, k items, return tail->next as the new pre
-			parent = reverseGroup(head,parent,cur,k);
-		}
-		return head;
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        ListNode* dummy=new ListNode(-1);
+        dummy->next=head;
+        ListNode* pre=dummy;
+        ListNode* curr=head;
+        int i=0;
+        while(head){
+            i++;
+            if(i%k==0){
+                pre=reverse(pre,k);
+                head=pre->next;
+            }else{
+                head=head->next;
+            }
+        }
+        head=dummy->next;
+        delete dummy;
+        return head;
     }
 };
