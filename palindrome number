@@ -1,38 +1,30 @@
-public class Solution {
-    int getDigits(int x){
-		int digits = 0;
-		while(x>0){
-			x /= 10;
-			digits++;
-		}
-		return digits;
-	}
-	int getMin(int n){
-		int min=1;
-		while(n>1){
-			min *= 10;
-			n--;
-		}
-		return min;
-	}
-    public boolean isPalindrome(int x) {
+class Solution {
+    public:
+    int getDivisor(int x){
+        int r=1;
+        while(x>=10){
+            x/=10;
+            r*=10;
+        }
+        return r;
+    }
+    
+    bool isPalindrome(int x) {
         // Start typing your Java solution below
         // DO NOT write main() function
     if(x<0)
 		return false;
-	if(x<9)
-		return true;
-	int digits = getDigits(x);
-	while(digits>1){
-		int high = x/getMin(digits);
+	int divisor = getDivisor(x);
+	while(x>=10){
+		int high = x/divisor;
 		int low  = x%10;
 		if(high!=low)
 			return false;
-		x -= (high*getMin(digits));
+		x -= (high*divisor);
 		x /= 10;
-		digits -=2;
+		divisor/=100;
 	}
 	return true;
     }
-}
+};
 
