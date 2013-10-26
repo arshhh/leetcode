@@ -1,45 +1,24 @@
-/**
- * Definition for binary tree
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
 class Solution {
+private:
+    void dfs(TreeNode *root ,int sum,vector<vector<int> > &result,vector<int> path) {
+        if (!root) {
+            return ;
+        }
+        path.push_back(root->val);
+        if (root->left == NULL && root->right == NULL) {
+            if (root->val == sum) {
+                result.push_back(path);
+            }
+        }
+        dfs(root->left , sum - root->val,result,path);
+        dfs(root->right , sum - root->val,result,path);
+        path.pop_back();
+    }
 public:
     vector<vector<int> > pathSum(TreeNode *root, int sum) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-    vector<vector<int> > result;
-	if(root==NULL){
-		return result;
-	}
-	//it's a leaf
-	if(root->left==NULL && root->right==NULL){
-		if(root->val==sum){
-			vector<int> path;
-			path.push_back(sum);
-			result.push_back(path);
-			return result;
-		}
-		return result;
-	
-	}
-	vector<vector<int> > left_vector=pathSum(root->left,sum-root->val);
-	vector<vector<int> > right_vector=pathSum(root->right,sum-root->val);
-	for(int i=0;i<left_vector.size();i++){
-		vector<int> path=left_vector[i];
-		path.insert(path.begin(),root->val);
-		result.push_back(path);
-	}
-	for(int i=0;i<right_vector.size();i++){
-		vector<int> path=right_vector[i];
-		path.insert(path.begin(),root->val);
-		result.push_back(path);
-	}	
-	return result;
+        vector<vector<int> > result;
+        vector<int> path;
+        dfs(root , sum,result,path);
+        return result;
     }
 };
-
