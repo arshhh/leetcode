@@ -1,0 +1,28 @@
+void print_last_lines(char *str, int n)
+{
+   if(n<=0)
+    return;
+  if(*str=='\0'){
+      cout<<"the string is empty"<<endl;
+      return;
+  }
+
+    char** queue=new char*[n];
+    int start=0;
+    int size=0;
+    char* target=str;
+    queue[size++]=target++;
+    while(*target!='\0'){
+        if(*target=='\n'){
+            if(size==n){
+                queue[start]=++target;
+                start=(start+1)%n;
+            }else{
+                queue[size++]=++target;
+            }
+        }else
+            target++;
+    }
+    printf("%s\n",queue[start]);
+}
+ 
