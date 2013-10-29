@@ -4,42 +4,30 @@
 using namespace std;
 
 void mod4(int a[],int n){
-    int p0=0;
-    int p1=0;
-    int p2=n;
-    int p3=n;
-    int i=0;
-    while(i<p2){
-        if(a[i]%4==0){
-            if(p0==p1){
-                a[p0++]=a[i];
-                p1++;
-            }else{
-                swap(a[p0++],a[i]);
-                p1++;
-            }
-            i++;
-        }else if(a[i]%4==1){
+    int p0=0; //the position to write mod4==0
+    int p1=0; //the position to write mod4==1
+    int p2=n; //the first index mod4==2
+    int p3=n; //the first index mod4==3
+    while(p1<p2){
+        int v=a[p1]%4;
+        if(v==0){
+            swap(a[p0++],a[p1++]);            
+        }else if(v==1){
             p1++;
-            i++;
-        }else if(a[i]%4==2){
-            swap(a[--p2],a[i]);
+        }else if(v==2){
+            swap(a[--p2],a[p1]);
         }else{
-            if(p2==p3){
-                swap(a[--p3],a[i]);
+            if(p2==p3)
                 p2--;
-            }else{
-                swap(a[i],a[--p2]);
-                swap(a[p2],a[--p3]);
-            }
+            swap(a[--p3],a[p1]);
         }
     }
 }
 int main()
 {
-    int a[]={1,2,3,4,5,6,7,8};
-    mod4(a,8);
-    for(int i=0;i<8;i++)
+    int a[]={1,2,3,4,5,6,7,8,13,4,5,0,23};
+    mod4(a,13);
+    for(int i=0;i<13;i++)
         cout<<a[i]<<" ";
    return 0;
 }
