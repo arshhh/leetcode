@@ -15,11 +15,10 @@ public:
         RandomListNode* tmp=head;
         //make a copy
         while(tmp!=NULL){
-            RandomListNode* next=tmp->next;
             RandomListNode* copy=new RandomListNode(tmp->label);
+            copy->next=tmp->next;
             tmp->next=copy;
-            copy->next=next;
-            tmp=next;
+            tmp=copy->next;
         }
      
         //create random connection
@@ -31,14 +30,11 @@ public:
         //divide the two lists;
         tmp=head;
         RandomListNode* result=tmp->next;
-        RandomListNode* tmp2=result;
         while(tmp!=NULL){
-            tmp->next=tmp2->next;
+            RandomListNode* copy=tmp->next;
+            tmp->next=copy->next;
             tmp=tmp->next;
-            if(tmp!=NULL){
-                tmp2->next=tmp->next;
-                tmp2=tmp2->next;
-            }
+            copy->next= tmp==NULL? NULL : tmp->next;
         }
         return result;
     }
