@@ -12,7 +12,7 @@ char* transfer(char* s){
     for(int i=1;i<len;i++){
         if(s[i]!=curr){
             char tmp=s[i];
-            if(res_id<=len-2){
+            if(res_id<=i-1){
                 s[res_id++]=curr;
                 s[res_id++]=count+'0';
                 curr=tmp;
