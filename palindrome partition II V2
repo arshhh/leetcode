@@ -1,76 +1,30 @@
 class Solution {
 public:
- bool isPalindrome(string s,int i, int j){
-        while(j>i){
-			if(s[j] == s[i]){
-				i++;
-				j--;
-			}
-else{
-	return false;
-}	
-		}
-		return true;
-	}
-
-    bool** getPalindromeTable(string s){
-        int n=s.size();
-        //table[i][j] means s[i][j] is palindrome or not
-        
-        bool** table=new bool*[n];
-        for(int i=0;i<n;i++)
-            table[i]=new bool[n];
-        for(int len=1;len<=n;len++){
-            for(int i=0;i+len-1<n;i++){
-                int end=i+len-1;
-                if(len==1)
-                    table[i][end]=true;
-                else{
-                    if(s[i]!=s[end])
-                        table[i][end]=false;
-                    else{
-                        if(i+1<=end-1){
-                            table[i][end] = table[i+1][end-1];
-                        }else
-                            table[i][end] = true;
-                    }
-                }
-            }
-        }//for
-        return table;
-        
-    }
     int minCut(string s) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-    int n=s.size();
-	//dp[i] min cuts between s[i..n) dp[0] is what we want
-	int dp[n+1];
-	for(int i=0;i<n+1;i++)
-		dp[i]=n+1;
-	dp[n]=-1;
-	dp[n-1]=0;
-    //build palindrome table
-    
-    bool ** table=getPalindromeTable(s);
-	//test s[i...n) 
-	for(int i=n-2;i>-1;i--){
-        if(isPalindrome(s,i,n-1)){
-            dp[i]=0;
-            continue;
+        vector<vector<int>> vec(s.length() , vector<int>());
+        for (int i = 0 ; i < s.length() ; i ++) {
+            //center is one character
+            for (int j = 0 ; i - j >= 0 && i + j < s.length() && s[i-j] == s[i+j]; j ++) {
+                vec[i+j].push_back(i-j);
+            }
+            //center is two characters
+            for (int j = 0 ; i - j >= 0 && i + j + 1 < s.length() && s[i-j] == s[i+j+1]; j ++) {
+                vec[i+j+1].push_back(i-j);
+            }
         }
-		for(int k=n-2;k>=i;k--){
-			//test if s[i...k] is a palindrome
-			if(table[i][k]){
-				dp[i]=min(dp[i],1+dp[k+1]);      
-			}
-		}
-	}//for
-	//delete table
-	for(int i=0;i<n;i++)
-		delete[] table[i];
-	delete []table;
-	return dp[0];
+        //vec[i] stores the palindrome index before i 
+        vector<int> dp(s.length() , INT_MAX);
+        dp[0] = 0;
+        for (int i = 1 ; i < s.length() ; i ++) {
+            for (int j = 0 ; j < vec[i].size() ; j ++) {
+                if(vec[i][j]==0){
+                    dp[i]=0;
+                    break;
+                }
+                else
+                     dp[i] = min(dp[vec[i][j]-1]+1, dp[i]);
+            }
+        }
+        return dp[s.length()-1];
     }
-};
-
+}; 
