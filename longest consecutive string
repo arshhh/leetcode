@@ -10,33 +10,31 @@ public:
 			map.insert(pair<int,int>(num[i],1)); 
 		}
 		unordered_map<int,int>::iterator iter,tmp;
-		int max=1;
+		int m=1;
 		for(iter=map.begin();iter!=map.end();iter++){
 			pair<int,int> val = *iter;
 			//has been visited
 			if(val.second==-1)
 				continue;
-			int v1=val.first+1;
-			int v2=val.first-1;
+			int lo=val.first;
+			int hi=lo;
 			while(true){
-				tmp = map.find(v1);
+				tmp = map.find(lo-1);
 				if(tmp==map.end())
 					break;
-				iter->second +=1;
-				tmp->second = -1;
-				v1++;
+				tmp->second=-1;
+			    lo=lo-1;
 			}
 			while(true){
-				tmp=map.find(v2);
+				tmp=map.find(hi+1);
 				if(tmp==map.end())
 					break;
-				iter->second +=1;
-				tmp->second = -1;
-				v2--;
+				tmp->second=-1;
+			    hi=hi+1;
 			}
-			max=max>iter->second ? max : iter->second;
+			m=max(m,hi-lo+1);
 			
 		}//for
-		return max;
+		return m;
     }
 };
