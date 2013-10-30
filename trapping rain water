@@ -1,22 +1,24 @@
 class Solution {
 public:
     int trap(int A[], int n) {
-        // Note: The Solution object is instantiated only once and is reused by each test case.
-        int result=0;
-        int maxL[n];
-        int maxR[n];
-        maxL[0]=A[0];
-        for(int i=1;i<n;i++){
-            maxL[i]=max(A[i],maxL[i-1]);
+        int lo = 0;
+        int hi = n - 1;
+        int sum = 0;
+        while (lo < hi) {
+            if (A[lo] < A[hi]) {
+                int k = lo + 1;
+                for ( ; A[k] <= A[lo]&& k<hi; k ++) {
+                    sum += A[lo] - A[k];
+                }
+                lo = k;
+            } else {
+                int k = hi - 1;
+                for ( ; A[k] <= A[hi] && k>lo; k --) {
+                    sum += A[hi] - A[k];
+                }
+                hi = k;
+            }
         }
-        maxR[n-1]=A[n-1];
-        for(int i=n-2;i>-1;i--){
-            maxR[i]=max(A[i],maxR[i+1]);
-        }
-        for(int j=0;j<n;j++){
-            result+=( min(maxL[j],maxR[j])-A[j]);
-        }
-        return result;
-
+        return sum;
     }
 };
