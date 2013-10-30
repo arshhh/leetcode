@@ -9,42 +9,24 @@
 class Solution {
 public:
     ListNode *deleteDuplicates(ListNode *head) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-        ListNode* cur=head;
-        ListNode* pre=NULL;
-        bool delCur=false;
-        
-         while(cur!=NULL && cur->next!=NULL){
-    		if(cur->val == cur->next->val){
-				delCur=true;
-				cur->next = cur->next->next;			    
-			}else{
-                if(delCur){
-                    if(pre!=NULL){
-                        pre->next=cur->next;
-                        cur=cur->next;
-                    }else{
-                        head = cur->next;
-                        cur = head;
-                    }
-                    delCur=false;
-                }else{
-                    pre=cur;
-		            cur=cur->next;
-                  
-                }
-			}    
-		}
-      
-        if(delCur){   
-            if(pre!=NULL){
-                pre->next=cur->next;
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        ListNode* dummy=new ListNode(-1);
+       // dummy->next=head;
+        ListNode* curr=dummy;
+        while(head){
+            if(!head->next || head->val!=head->next->val){
+                curr->next=head;
+                curr=curr->next;
+                head=head->next;
             }else{
-                head = cur->next;
+                int val=head->val;
+                head=head->next;
+                while(head && head->val==val)
+                    head=head->next;
             }
         }
-        
-        return head;
+        curr->next=NULL;
+        return dummy->next;
     }
 };
