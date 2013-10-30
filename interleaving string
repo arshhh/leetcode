@@ -1,42 +1,29 @@
 class Solution {
 public:
     bool isInterleave(string s1, string s2, string s3) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function    
-          int n1=s1.size();
-	int n2=s2.size();
-	int n3=s3.size();
-	if(n1+n2!=n3){
-		return false;
-	}
-	//valid[i][j] means s1(i~) & s2(j~) can form s3(i+j-1~)
-	bool valid[n1+1][n2+1];
-    valid[n1][n2] = true;
-	for(int i=0;i<n1;i++){
-		if(s1.substr(i).compare(s3.substr(n3-n1+i))==0)
-			valid[i][n2]=true;
-		else
-			valid[i][n2]=false;
-	}
-	for(int i=0;i<n2;i++){
-		if(s2.substr(i).compare(s3.substr(n3-n2+i))==0)
-			valid[n1][i]=true;
-		else
-			valid[n1][i]=false;
-
-	}
-for(int i=n1-1;i>-1;i--){
-	for(int j=n2-1;j>-1;j--){
-		valid[i][j] = false;
-		if(s1[i] == s3[i+j] && valid[i+1][j]){
-			valid[i][j]=true;
-		}
-		if(s2[j] == s3[i+j] && valid[i][j+1]){
-			valid[i][j]=true;
-		}
-	}
-}
-return valid[0][0];
+        int n = s1.length();
+        int m = s2.length();
+        if (n + m != s3.length()) {
+            return false;
+        }
+        vector<vector<bool> > dp(n+1 , vector<bool>(m+1,false));
+        dp[0][0] = true;
+        for (int i = 0 ; i <= n ; i ++) {
+            for (int j = 0 ; j <= m ; j ++) {
+                if(i==0&&j==0)
+                    continue;
+                if (i > 0) {
+                    dp[i][j] = dp[i-1][j] & (s1[i-1] == s3[i+j-1]);
+                }else{
+                    dp[i][j] = dp[i][j-1] & (s2[j-1]==s3[i+j-1]);
+                }
+                if (j > 0) {
+                    dp[i][j] = dp[i][j] | (dp[i][j-1] & (s2[j-1] == s3[i+j-1]));
+                }else{
+                    dp[i][j] = dp[i-1][j] & (s1[i-1]==s3[i+j-1]);
+                }
+            }
+        }
+        return dp[n][m];
     }
 };
-
