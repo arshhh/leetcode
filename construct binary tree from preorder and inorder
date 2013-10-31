@@ -9,82 +9,24 @@
  */
 class Solution {
 public:
-    vector<int> pop_front(vector<int> &v){
-    	vector<int> res;
-		for(int i=1;i<v.size();i++)
-			res.push_back(v[i]);
-		return res;
-	}
-	int find(vector<int>& v,int val){
-		for(int i=0;i<v.size();i++)
-			if(v[i]==val)
-				return i;
-		return -1;
-	}
-	//
-	void partition(vector<int>& old,int p,vector<int>& left,vector<int>& right,bool include){
-		int size = old.size();
-		for(int i=0;i<p;i++){
-			left.push_back(old[i]);
-		}
-		if(include){
-			right.push_back(old[p]);
-            //the last element is root in postorder
-            size--;   
-		}
-            
-		for(int i=p+1;i<size;i++){
-			right.push_back(old[i]);
-		}
-	}
+    TreeNode * buildTree(vector<int> &preorder,int sp,int ep,vector<int> &inorder,int si,int ei){
+        if(ep<sp)
+            return NULL;
+        int val=preorder[sp];
+        for(int i=si;i<=ei;i++){
+            if(inorder[i]==val){
+                TreeNode* root=new TreeNode(val);
+                root->left=buildTree(preorder,sp+1,sp+i-si,inorder,si,i-1);
+                root->right=buildTree(preorder,sp+i-si+1,ep,inorder,i+1,ei);
+                return root;
+            }
+        }
+        
+    }
     TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-	int size = inorder.size();
-        if( size == 0)
-	return NULL;
-	if(size == 1){
-		TreeNode* root=new TreeNode(inorder[0]);
-		return root;
-	}
-	//has no right child
-	if(inorder[size-1] == preorder[0]){
-		TreeNode* root = new TreeNode(inorder[size-1]);
-		root->right = NULL;
-		inorder.pop_back();
-		preorder= pop_front(preorder);
-		TreeNode* left = buildTree(preorder,inorder);
-		root->left = left;
-		return root;
-}	
-//has no left child 
-if(inorder[0] == preorder[0]){
-	TreeNode* root = new TreeNode(inorder[0]);
-	root->left = NULL;
-	preorder=pop_front(preorder);
-	inorder = pop_front(inorder);
-	TreeNode* right = buildTree(preorder,inorder);
-	root->right = right;
-	return root;
-}
-//has left and right
-TreeNode* root = new TreeNode(preorder[0]);
-int rootIndex = find(inorder,root->val);
-
-vector<int> leftInorder,rightInorder,leftPreorder,rightPreorder;
-partition(inorder,rootIndex,leftInorder,rightInorder,false);
-//find the size of left tree 
-int leftSize = leftInorder.size();
-for(int i=1;i<leftSize+1;i++)
-    leftPreorder.push_back(preorder[i]);
-for(int i=leftSize+1;i<size;i++)
-    rightPreorder.push_back(preorder[i]);
-    
-TreeNode* left = buildTree(leftPreorder,leftInorder);
-TreeNode* right = buildTree(rightPreorder,rightInorder);
-root->left = left;
-root->right = right;
-return root;
+        return buildTree(preorder,0,preorder.size()-1,inorder,0,inorder.size()-1);  
     }
 };
 
