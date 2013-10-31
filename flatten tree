@@ -9,33 +9,23 @@
  */
 class Solution {
 public:
-   TreeNode* getLeaf(TreeNode* root){
-	TreeNode* tmp = root;
-	while(tmp->right!=NULL)
-		tmp=tmp->right;
-	return tmp;
-}
     void flatten(TreeNode *root) {
-        // Start typing your C/C++ solution below
-        // DO NOT write int main() function
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
         if(root==NULL)
-	return;
-	if(root->left!=NULL && root->right!=NULL){
-		flatten(root->left);
-		flatten(root->right);
-		TreeNode* tmp = getLeaf(root->left);
-		tmp->right = root->right;
-		root->right = root->left;
-root->left = NULL;	
-	}
-	else if(root->left!=NULL){
-		flatten(root->left);
-		root->right = root->left;
-		root->left = NULL;
-	}
-	else if(root->right!=NULL){
-		flatten(root->right);
-	}	
+            return;
+        if(root->left==NULL){
+            flatten(root->right);
+        }else{
+            TreeNode* right=root->right;
+            TreeNode* right_most=root->left;
+            while(right_most->right){
+                right_most=right_most->right;
+            }
+            right_most->right=right;
+            root->right=root->left;
+            root->left=NULL;
+            flatten(root->right);
+        }
     }
 };
-
