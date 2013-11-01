@@ -1,0 +1,24 @@
+bool allUsed(bool isUsed[]){
+	for(int i=0;i<4;i++)
+		if(!isUsed[i])
+			return false;
+	return true;
+}
+bool f24(int a[],float n,bool isUsed[]){
+	if(n != (int)n )
+		return false;
+	if(n==24 && allUsed(isUsed) )
+		return true;
+	for(int i=0;i<4;i++){
+		if(isUsed[i]==false){
+			isUsed[i]=true;
+			if(f24(a,n/a[i],isUsed) || 
+				f24(a,n*a[i],isUsed) ||
+				f24(a,n+a[i],isUsed) ||
+				f24(a,n-a[i],isUsed) )
+				return true;
+			isUsed[i]=false;
+		}
+	}
+	return false;
+}
