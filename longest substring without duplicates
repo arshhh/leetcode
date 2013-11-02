@@ -1,4 +1,3 @@
-
 class Solution {
 public:
 
@@ -11,25 +10,20 @@ public:
 	int length = 0;
     int i=0;
     int t[26];
+    //t stores the index of each character
     for(int k=0;k<26;k++)
         t[k]=-1;
     //test string endding at index j 
 	for(int j=0;j<size;j++){
         //test if repeated, -1 means it doesn't appear in it
         int k=t[s[j]-'a'];
-        if(k!=-1){
-            //update length
-            length=max(length,j-i);
-            while(i<=k){
-                t[s[i]-'a']=-1;
-                i++;
-            }
+        if(k>=i){
+            i=k+1;
         }
         //update j
         t[s[j]-'a']=j;
-	}
-	
-    length = max(length,size-i);
+        length=max(length,j-i+1);
+    }
     return length;
     }
 };
