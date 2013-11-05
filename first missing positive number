@@ -4,16 +4,12 @@ public:
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
         for(int i=0;i<n;){
-    	if(A[i]==i+1 || A[i]<1 || A[i]>n){
-			i++;
-			continue;
-		}else if(A[i]>=1 & A[i]<=n){
-			if(A[A[i]-1]==A[i])
-				i++;
-			else
-				swap(A[i],A[A[i]-1]);		
+    	    if(A[i]!=i+1 && A[i]>=1 && A[i]<=n && A[A[i]-1]!=A[i])
+    	        swap(A[i],A[A[i]-1]);
+    	    else
+    	        i++;
 		}
-	}
+	
 	for(int i=0;i<n;i++){
 		if(A[i]!=i+1)
 			return i+1;
