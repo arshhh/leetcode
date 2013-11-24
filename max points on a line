@@ -1,0 +1,63 @@
+/**
+ * Definition for a point.
+ * struct Point {
+ *     int x;
+ *     int y;
+ *     Point() : x(0), y(0) {}
+ *     Point(int a, int b) : x(a), y(b) {}
+ * };
+ */
+bool cmp(const Point& p1,const Point& p2){
+   return p1.x<p2.x || p1.x==p2.x && p1.y<p2.y;
+}
+
+bool equal(const Point& p1,const Point& p2){
+    return p1.x==p2.x && p1.y==p2.y;
+}
+
+int firstDiff(vector<Point> &points,int i){
+    for(int j=i+1;j<points.size();j++){
+        if(!equal(points[j],points[i]))
+            return j;
+    }
+    return points.size();
+}
+class Solution {
+public:
+    int maxPoints(vector<Point> &points) {
+        // IMPORTANT: Please reset any member data you declared, as
+        // the same Solution instance will be reused for each test case.
+        if(points.size()<=1)
+            return points.size();
+        int ret=1;
+        sort(points.begin(),points.end(),cmp);
+        for(int i=0;i<points.size()-1;i++){
+            //left point
+            if(i && equal(points[i],points[i-1]))
+                continue;
+            int right=firstDiff(points,i);
+            
+            if(right==points.size()){
+                ret=max(ret,right-i);
+                return ret;
+            }
+            //choose the right point 
+            for(int j=right;j<points.size();j++){
+                 if(equal(points[j],points[j-1]))
+                    continue;
+                 int tmp=right-i+1;
+                 Point line(points[j].x-points[i].x,points[j].y-points[i].y);
+                 //find more candidates points
+                 for(int k=j+1;k<points.size();k++){
+                     Point line2(points[k].x-points[i].x,points[k].y-points[i].y);
+                     if(line.x*line2.y==line.y*line2.x) // parallel
+                        tmp++;
+                     else
+                        continue;
+                 }
+                 ret=max(ret,tmp);
+            }
+        }
+        return ret;
+    }
+};
