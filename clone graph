@@ -6,62 +6,34 @@
  *     UndirectedGraphNode(int x) : label(x) {};
  * };
  */
+ typedef unordered_map<UndirectedGraphNode*,UndirectedGraphNode*> Map;
+ 
 class Solution {
 public:
-    void build(UndirectedGraphNode* node, unordered_map<int,int> &ids,unordered_map<int,vector<int> > &neighbors_map,
-    vector<UndirectedGraphNode*> &vnode){
-        int label=node->label;
-        unordered_map<int,int>::iterator iter=ids.find(label);
-        if(iter!=ids.end()){ //has visited
-            return;
-        }
-        vnode.push_back(node);
-        ids.insert(pair<int,int>(label,vnode.size()-1));
-        //update neighbors
+    //node is the original node and it has already push into map
+    void dfs(UndirectedGraphNode *node,Map& map){
+        UndirectedGraphNode* node_copy=map[node];
         vector<UndirectedGraphNode*> neighbors=node->neighbors;
-        vector<int> vneighbors;
         for(int i=0;i<neighbors.size();i++){
-            int n_label=neighbors[i]->label;
-            vneighbors.push_back(n_label);
+            if(map.find(neighbors[i])==map.end()){
+                UndirectedGraphNode* copy=new UndirectedGraphNode(neighbors[i]->label);
+                node_copy->neighbors.push_back(copy);
+                map[neighbors[i]]=copy; 
+                dfs(neighbors[i],map);
+            }else{
+                node_copy->neighbors.push_back(map[neighbors[i]]);
+            }
         }
-         neighbors_map.insert(pair<int,vector<int> >(label,vneighbors));
-        //visit neighbors using DFS
-        for(int i=0;i<neighbors.size();i++)
-            build(neighbors[i],ids,neighbors_map,vnode);
-        return;
     }
     UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
         // Note: The Solution object is instantiated only once and is reused by each test case.
-        //ids map label to vector index 
+        //ids map label to vector index
         if(node==NULL)
             return NULL;
-        unordered_map<int,int> ids;
-        //neighbors stores the neighbors' label for each element, the key word is the label
-        unordered_map<int,vector<int> > neighbors_map;
-        vector<UndirectedGraphNode*> vnode;
-        build(node,ids,neighbors_map,vnode);
-        //clone the nodes in the graph;
-        vector<UndirectedGraphNode* > vnode_clone;
-        for(int i=0;i<vnode.size();i++){
-            UndirectedGraphNode* node=vnode[i];
-            UndirectedGraphNode* n_node=new UndirectedGraphNode(node->label);
-            vnode_clone.push_back(n_node);
-        }
-        //update neighbors information
-        unordered_map<int,vector<int> >::iterator iter;
-        for(iter=neighbors_map.begin();iter!=neighbors_map.end();iter++){
-            int label=iter->first;
-            int id = ids.find(label)->second;
-            UndirectedGraphNode* n_node=vnode_clone[id];
-            vector<UndirectedGraphNode*> n_neighbors;
-            vector<int> vneighbors=iter->second;
-            for(int j=0;j<vneighbors.size();j++){
-                int nid=ids.find(vneighbors[j])->second;
-                n_neighbors.push_back(vnode_clone[nid]);
-            }
-            n_node->neighbors=n_neighbors;
-        }
-        return vnode_clone[0];
-        
+        Map map;
+        UndirectedGraphNode* node_copy=new UndirectedGraphNode(node->label);
+        map[node]=node_copy;
+        dfs(node,map);
+        return node_copy;
     }
 };
