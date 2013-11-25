@@ -1,0 +1,43 @@
+typedef pair<int,int> my_pair;
+
+class LRUCache{
+public:
+    list<my_pair> mylist;
+    unordered_map<int,list<my_pair>::iterator> map;
+    int capacity;
+    LRUCache(int capacity) {
+        this->capacity=capacity;
+    }
+    
+    int get(int key) {
+        unordered_map<int,list<my_pair>::iterator>::iterator iter=map.find(key);
+        if(iter==map.end())
+            return -1;
+        else{
+            //get used, update the map
+            int value=iter->second->second;
+            mylist.erase(iter->second);
+            mylist.push_front(my_pair(key,value));
+            map[key]=mylist.begin();
+            return value;
+            
+        }
+    }
+    
+    void set(int key, int value) {
+        unordered_map<int,list<my_pair>::iterator>::iterator iter=map.find(key);
+        if(iter!=map.end()){
+           mylist.erase(iter->second);
+           mylist.push_front(my_pair(key,value));
+           map[key]=mylist.begin();
+        }else{
+            mylist.push_front(my_pair(key,value));
+            map[key]=mylist.begin();
+            if(map.size()>capacity){
+                int key=mylist.back().first;
+                map.erase(key);
+                mylist.pop_back();
+            }
+        }
+    }
+};
