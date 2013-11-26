@@ -1,0 +1,37 @@
+class Solution {
+public:
+    void construct(int pos,string s,vector<int>* positions,vector<string>& ret,string sentence){
+        if(pos==-1){
+            sentence.resize(sentence.size()-1);
+            ret.push_back(sentence);
+            return;
+        }
+        for(int i=0;i<positions[pos].size();i++){
+            string word=s.substr(positions[pos][i],pos-positions[pos][i]+1);
+            construct(positions[pos][i]-1,s,positions,ret,word+" "+sentence);
+        }
+    }
+    vector<string> wordBreak(string s, unordered_set<string> &dict) {
+        // Note: The Solution object is instantiated only once and is reused by each test case.
+        int size=s.size();
+        vector<string> ret;
+        if(size==0)
+            return ret;
+        vector<int> positions[size]; //the previous valid index for index i-1
+        for(int i=0;i<size;i++){ //i is the ending index
+            for(int j=0;j<=i;j++){ //j is the starting index 
+                string suffix=s.substr(j,i-j+1);
+                if(dict.find(suffix)!=dict.end() &&( j==0 || positions[j-1].size()!=0) ) {
+                    positions[i].push_back(j); //previous index
+                }
+            }
+        }
+        //resize
+        if(positions[size-1].size()==0){
+            return ret;
+        }else{
+            construct(size-1,s,positions,ret,"");
+            return ret;
+        }
+    }
+};
