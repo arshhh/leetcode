@@ -1,47 +1,35 @@
 class Solution {
 public:
     //combinations from start to end and equals to target
-	vector<vector<int> > combinations(vector<int> &num,int start,int end,int target){
-		vector<vector<int> > result;
+	void combinations(vector<int> &num,int start,int end,int target,vector<int>& set,vector<vector<int>>& result){
 		if(target < 0 )
-			return result;
-	
-        if(end<start && target !=0)
-            return result;
+			return ;
 		if(target==0){
-			vector<int> empty;
-			result.push_back(empty);
-			return result;
+		    result.push_back(set);
+		    return;
 		}
         //combinations that doesn't end with num[end]
-        for(int i=end;i>=start-1;i--){
-            if(i>-1 && i+1<=end && num[i]==num[i+1])
-                continue;       
-            vector<vector<int> > tmp=combinations(num,0,i-1,target-num[i]);   
-             if(!tmp.empty()){
-    		        for(int j=0;j<tmp.size();j++){
-			        	vector<int> old_set=tmp[j];
-			        	old_set.push_back(num[i]);
-			        	result.push_back(old_set);
-			}
-		}
-	}       
-        
-		return result;
+        for(int i=start;i<=end;i++){
+            if(i==start || num[i]!=num[i-1]){
+                set.push_back(num[i]);
+                combinations(num,i+1,end,target-num[i],set,result);
+                set.pop_back();
+            }
+        }
 	}
     vector<vector<int> > combinationSum2(vector<int> &num, int target) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-        sort(num.begin(),num.end());
 	int n=num.size();
-	
 	vector<vector<int> > result;
 	if(n==0)
 		return result;
-
+    sort(num.begin(),num.end());
+    vector<int> set;
     
-	return  combinations(num,0,n-1,target);
+    combinations(num,0,n-1,target,set,result);
+	
+	return result;
 	
     }
 };
-
