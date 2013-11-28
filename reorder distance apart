@@ -1,0 +1,28 @@
+string reorder(string s, int dis){
+    int freq[26]={0};
+    int index[26]; //the index of the prevous i+'a'
+    for(int i=0;i<26;i++)
+        index[i]=-1;
+    for(int i=0;i<s.size();i++)
+        freq[s[i]-'a']++;
+    string ret="";
+    //use greedy algorithm, select the char one by one
+    for(int i=0;i<s.size();i++){
+        int tmp=-1;
+        int mf=0;
+        for(int j=0;j<26;j++){
+            if(freq[j]>mf && (index[j]==-1 || i-index[j]>=dis) ){
+                tmp=j;
+                mf=freq[j];
+            }
+        }
+        if(tmp==-1){
+            cout<<"no proper result"<<endl;
+            return ret;
+        }
+        freq[tmp]--;
+        index[tmp]=i;
+        ret+=(tmp+'a');
+    }
+    return ret;
+}
