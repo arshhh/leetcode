@@ -1,42 +1,53 @@
 
 class Solution {
 public:
-    bool isPalindrome(string s,int i, int j){
-		while(j>i){
-			if(s[j] == s[i]){
-				i++;
-				j--;
-			}
-             else{
-        	return false;
-            }	
-		}
-		return true;
-	}
-	void partition(string s,int start,vector<vector<string> > &result,vector<string>& part){
+	void partition(string s,vector<vector<int> >& pos,int start,vector<vector<string> > &result,vector<string>& part){
 	    if(start==s.size()){
-	        
 	        result.push_back(part);
 	        return;
-	        
 	    }
-	    for(int i=start;i<s.size();i++){
-	        if(isPalindrome(s,start,i)){
-	            part.push_back(s.substr(start,i-start+1));
-	            partition(s,i+1,result,part);
+	    if(!pos[start].empty()){
+	      for(int i=0;i<pos[start].size();i++){
+	            part.push_back(s.substr(start,pos[start][i]-start));
+	            partition(s,pos,pos[start][i],result,part);
 	            part.pop_back();
-	        }
+	         }
 	    }
 	}
     vector<vector<string>> partition(string s) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
      	 vector<vector<string> > result;
-         int size = s.size();
-        if(size == 0)
+     	 //stores the next valid position 
+
+         int n = s.size();
+        if(n == 0)
             return result;
+        vector<vector<int> > pos(n,vector<int>()); 
+        bool dp[n][n];
+        for(int i=0;i<n;i++){ //single characters
+            dp[i][i]=true;
+            pos[i].push_back(i+1);
+        }
+        for(int i=0;i<n-1;i++){ //double characters
+            if(s[i]==s[i+1]){
+                dp[i][i+1]=true;
+                pos[i].push_back(i+2);
+            }else
+                dp[i][i+1]=false;
+        }
+        for(int k=3;k<=n;k++){
+            for(int i=0;i+k-1<n;i++){
+                if(s[i]==s[i+k-1] && dp[i][i+k-1]){
+                    dp[i][i+k-1]=true;
+                    pos[i].push_back(i+k);
+                }else
+                    dp[i][i+k-1]=false;
+            }
+        }
+        
         vector<string> part;
-        partition(s,0,result,part);
+        partition(s,pos,0,result,part);
         return result;
     }
 };
