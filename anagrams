@@ -1,44 +1,22 @@
 class Solution {
 public:
 
-    string sort(string a){
-         int count[26]={0};
-         int n=a.size();
-        string res="";
-        for(int i=0;i<n;i++){
-            int num1=a[i]-'a';
-            count[num1]++;
-        }
-        for(int i=0;i<26;i++){
-            if(count[i]!=0){
-                string tmp(count[i],'a'+i);
-                res += tmp;
-            }
-        }
-        return res;
-    }
     vector<string> anagrams(vector<string> &strs) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
         int n=strs.size();
-        bool found=false;
-        bool* matched=new bool[n]();
         vector<string> res;
-        unordered_map<string,int> map;
+        unordered_map<string,vector<int> > map;
+        unordered_map<string,vector<int> >::iterator iter;
         for(int i=0;i<n;i++){
-            string new_str = sort(strs[i]);
-            unordered_map<string,int>::iterator iter = map.find(new_str);
-            if(iter!=map.end()){
-                res.push_back(strs[i]);
-                if(iter->second!=-1){
-                    res.push_back(strs[iter->second]);
-                    iter->second =-1;
-                }
-            }else{
-                map[new_str]=i;
-            }
-        
-        
+            string tmp=strs[i];
+            sort(tmp.begin(),tmp.end());
+            map[tmp].push_back(i);
+        }
+        for(iter=map.begin();iter!=map.end();iter++){
+            if(iter->second.size()>1)
+                for(int i=0;i<iter->second.size();i++)
+                    res.push_back(strs[iter->second[i]]);
         }
         return res;
     }
