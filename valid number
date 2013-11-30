@@ -35,8 +35,7 @@ public:
                 return false;
             s++;
         }
-        if(state==2 || state==4 || state==8 || state==7)
-            return true;
-        return false;
+        return state==2 || state==4 || state==8 || state==7;
+
     }
 };
