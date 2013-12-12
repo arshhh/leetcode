@@ -1,35 +1,14 @@
-/*
-I should take some time to review the vector, List and other STL containers. In addition, = in vector is to copy 
-a = b. all operation on a won't have effect on b. I should check this. 
-*/
 class Solution {
 public:
-    int min1(int i, int j){
-        return i<j ? i : j;
-    }
     int minimumTotal(vector<vector<int> > &triangle) {
         // Start typing your C/C++ solution below
-        // DO NOT write int main() function
-        vector<int> upLevel=triangle.at(0);
-	vector<int> currentLevel=triangle.at(0);
-	for(int i=1;i<triangle.size();i++){
-		currentLevel = triangle.at(i);
-		//first element
-		currentLevel.at(0) += upLevel.at(0);
-		for(int j=1;j<i;j++){
-			currentLevel.at(j) = min(currentLevel.at(j)+upLevel.at(j-1),
-				currentLevel.at(j)+upLevel.at(j) );
-		}
-		//last element
-		currentLevel.at(i) += upLevel.at(i-1);
-		upLevel = currentLevel;
-	}
-	int minSum = currentLevel.at(0);
-	for(int k=1;k<currentLevel.size();k++){
-		if(minSum>currentLevel.at(k))
-			minSum = currentLevel.at(k);
-	}
-	return minSum;
-
+        if(triangle.size()==0)
+            return 0;
+        for(int i=triangle.size()-2;i>=0;i--){
+            for(int j=0;j<=i;j++)
+                triangle[i][j]+=min(triangle[i+1][j],triangle[i+1][j+1]);
+        }
+        return triangle[0][0];
     }
+    
 };
