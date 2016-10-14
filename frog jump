@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool canCross(vector<int>& stones) {
+        if(stones[1] != 1)
+            return false;
+        vector<unordered_set<int>> record(stones.size(), unordered_set<int>());
+        return canCrossHelper(stones, record, 1, 1);
+    }
+    // curr: index of current stone
+    bool canCrossHelper(vector<int>& stones, vector<unordered_set<int>>& record, int curr, int pre) {
+        if (curr == stones.size() - 1)
+            return true;
+        if (record[curr].find(curr-pre) != record[curr].end())
+            return false;
+        // i is the next stone 
+        for(int i = curr + 1; i < stones.size(); i++) {
+            int gap = stones[i] - stones[curr];
+            if( gap>=(pre-1) && gap<=(pre+1)) {
+                if(canCrossHelper(stones, record, i, gap))
+                    return true;
+            }
+            else if (gap > pre + 1) {
+                break;                
+            }
+        }
+        record[curr].insert(curr-pre);
+        return false;
+    }
+};
