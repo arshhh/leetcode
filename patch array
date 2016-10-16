@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int minPatches(vector<int>& nums, int n) {
+       int i = 0;
+       int p = 0;
+       // Search from 1 to n, 1-(num-1) has already been available. num is the next value we are looking for.
+       for(long long num=1;num<=n;) {
+           if (i>=nums.size()) {
+               double nn=n;
+               p+=int(ceil(log2(((nn+1)/num))));
+               return p;
+           }
+           if(nums[i] == num) {
+               i++;
+               num = 2*num;
+           }else if(nums[i]>num) {
+               p++;
+               num = 2*num;
+           } else {
+               num += nums[i];
+               i++;
+           }
+       }
+       return p;
+    }
+};
