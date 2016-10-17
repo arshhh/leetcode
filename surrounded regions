@@ -1,84 +1,74 @@
-/* 
-
-can pass the small tests, but not the large ones, it prompts run time error, really strange
-
-*/
-
-
 class Solution {
 public:
-
-
-
-void mark(vector<vector<char> > &board,int i,int j,int rows,int cols,queue<int> &pos_queue){
-   // queue<int> pos_queue;
-    board[i][j]='1';
-    pos_queue.push(i*cols+j);
-    
-    while(!pos_queue.empty()){
-        int pos=pos_queue.front();
-        int x=pos/cols;
-        int y=pos%cols;
-     
-        pos_queue.pop();
-        if(x+1<rows && board[x+1][y]=='O'){
-             board[x+1][y]='1';
-            pos_queue.push( pos+cols );
-        }
-        if(x-1>-1 && board[x-1][y]=='O'){
-               board[x-1][y]='1';
-            pos_queue.push( pos-cols );
-        }
-        if(y+1<cols && board[x][y+1]=='O'){
-               board[x][y+1]='1';
-            pos_queue.push( pos+1);
-        }
-        if(y-1>-1 && board[x][y-1] == 'O'){
-               board[x][y-1]='1';
-            pos_queue.push(pos-1);
+    void mark(vector<vector<char>> &board,int i,int j){
+        const int& rows = board.size();
+        const int& cols = board[0].size();
+        // 1 means has been visited and is open.
+        board[i][j]='1';
+        queue<pair<int,int>> pos_queue;
+        pos_queue.push(std::make_pair(i,j));
+        // BFS.
+        while(!pos_queue.empty()){
+            const auto& pos=pos_queue.front();
+            int x= pos.first;
+            int y=pos.second;
+            pos_queue.pop();
+            // Down.
+            if(x+1<rows && board[x+1][y]=='O'){
+                board[x+1][y]='1';
+                pos_queue.push(std::make_pair(x+1,y));
+            }
+            // Up.
+            if(x-1>-1 && board[x-1][y]=='O'){
+                board[x-1][y]='1';
+                pos_queue.push(std::make_pair(x-1,y));
+            }
+            // Right.
+            if(y+1<cols && board[x][y+1]=='O'){
+                board[x][y+1]='1';
+                pos_queue.push(std::make_pair(x,y+1));
+            }
+            // Left.
+            if(y-1>-1 && board[x][y-1] == 'O'){
+                board[x][y-1]='1';
+                pos_queue.push(std::make_pair(x,y-1));
+            }
         }
     }
-}
 
     void solve(vector<vector<char> > &board) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-    int rows= board.size();
-	if(rows==0)
-		return;
-    int cols = board[0].size();
-    queue<int> pos_queue;
-	//first row
-    for(int j=0;j<cols;j++)
-	    if(board[0][j] == 'O')
-		    mark(board,0,j,rows,cols,pos_queue);
-
-	 for(int i = 1;i<rows-1;i++){
-	
-		if(board[i][0] == 'O')
-			mark(board,i,0,rows,cols,pos_queue);
-		if(board[i][cols-1]== 'O')	
-			mark(board,i,cols-1,rows,cols,pos_queue);
-	}
-	
-	if(rows>1){
-		for(int j=0;j<cols;j++){
-			if(board[rows-1][j] == 'O')
-			     mark(board,rows-1,j,rows,cols,pos_queue);
-		}
-	}
-	//change zero to x
-	for(int i = 0;i<rows;i++){
-		for(int j=0;j<cols;j++){
-			if(board[i][j]=='O')
-				board[i][j]= 'X';
-			else if( board[i][j]== '1')
-				board[i][j] = 'O';
-    
-         
-		}	
-	}
-
+        int rows= board.size();
+    	if(rows==0)
+    		return;
+        int cols = board[0].size();
+    	// Scan the first row to BFS the elements with 'O'
+        for(int j=0;j<cols;j++) {
+            // First Row.
+    	    if(board[0][j] == 'O')
+    		    mark(board,0,j);
+    		// The last rows.
+    	    if(rows>1 && board[rows-1][j] == 'O')
+    			 mark(board,rows-1,j);  
+        }
+        // Scan the left and right cols.
+        for(int i = 1;i<rows-1;i++){
+            // Left most col.
+    		if(board[i][0] == 'O')
+    			mark(board,i,0);
+    		// Right most col.
+    		if(cols>1 && board[i][cols-1]== 'O')	
+    			mark(board,i,cols-1);
+    	}
+    	//change O to X and 1 to O. 
+    	for(int i = 0;i<rows;i++){
+    		for(int j=0;j<cols;j++){
+    			if(board[i][j]=='O')
+    				board[i][j]= 'X';
+    			else if( board[i][j]== '1')
+    				board[i][j] = 'O';
+    		}	
+    	}
     }
 };
-
