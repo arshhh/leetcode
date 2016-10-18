@@ -1,25 +1,16 @@
-/**
- * Definition for binary tree
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
 class Solution {
 public:
     void inorderTraversal(TreeNode* root,TreeNode* & pre,TreeNode* &first,TreeNode* &second){
         if(root==NULL)
             return;
         inorderTraversal(root->left,pre,first,second);
+        
+        
         if(pre!=NULL && root->val<pre->val){
             if(!first){
                 first=pre;
-                second=root;
-            }else{
-                second=root;
             }
+            second=root;
         }
         pre=root;
         inorderTraversal(root->right,pre,first,second);
