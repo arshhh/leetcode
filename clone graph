@@ -6,34 +6,27 @@
  *     UndirectedGraphNode(int x) : label(x) {};
  * };
  */
- typedef unordered_map<UndirectedGraphNode*,UndirectedGraphNode*> Map;
- 
 class Solution {
 public:
-    //node is the original node and it has already push into map
-    void dfs(UndirectedGraphNode *node,Map& map){
-        UndirectedGraphNode* node_copy=map[node];
-        vector<UndirectedGraphNode*> neighbors=node->neighbors;
-        for(int i=0;i<neighbors.size();i++){
-            if(map.find(neighbors[i])==map.end()){
-                UndirectedGraphNode* copy=new UndirectedGraphNode(neighbors[i]->label);
-                node_copy->neighbors.push_back(copy);
-                map[neighbors[i]]=copy; 
-                dfs(neighbors[i],map);
-            }else{
-                node_copy->neighbors.push_back(map[neighbors[i]]);
-            }
-        }
-    }
     UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
-        // Note: The Solution object is instantiated only once and is reused by each test case.
-        //ids map label to vector index
-        if(node==NULL)
-            return NULL;
-        Map map;
-        UndirectedGraphNode* node_copy=new UndirectedGraphNode(node->label);
-        map[node]=node_copy;
-        dfs(node,map);
-        return node_copy;
+        unordered_map<UndirectedGraphNode*, UndirectedGraphNode*> map;
+        return helper(node, map);
+    }
+    UndirectedGraphNode* helper(UndirectedGraphNode* node, unordered_map<UndirectedGraphNode*, UndirectedGraphNode*>& map) {
+        if(node==nullptr)
+            return nullptr;
+        if(map.find(node) == map.end()) {
+            UndirectedGraphNode *new_node = new UndirectedGraphNode(node->label);
+            map[node] = new_node;
+        } else {
+            // If a node is in the map, that means it's already been cloned.
+            return map[node];
+        }
+        UndirectedGraphNode *new_node = map[node];
+        for(const auto& neighbor: node->neighbors) {
+            UndirectedGraphNode *new_neighbor = helper(neighbor, map);
+            new_node->neighbors.push_back(new_neighbor);
+        }
+        return new_node;
     }
 };
