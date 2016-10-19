@@ -1,0 +1,32 @@
+class Solution {
+public:
+ int maxProfit(vector<int> &prices) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+    int size = prices.size();
+    int startIndex = 0;
+    if(size==0)
+        return 0;
+    //profit1[i] means the max profit from [0,i]
+    vector<int> profit1(size, 0);
+	//profit2[i] means the max profit from [i,n-1];
+    vector<int> profit2(size,0);	
+	//calculate profit1
+	int min_tmp=prices[0];
+	for(int i=1;i<size;i++){
+        profit1[i] = std::max(profit1[i-1], prices[i]-min_tmp);
+        min_tmp = std::min(min_tmp, prices[i]);
+	}
+	//calculate profit2, [i,n-1]
+	int max_tmp=prices[size-1];
+	for(int i=size-2;i>-1;i--){
+        profit2[i] = std::max(profit2[i+1], max_tmp-prices[i]);
+        max_tmp = std::max(max_tmp, prices[i]);
+	}
+	int profit=profit1[size-1];
+    for(int i=0;i<size-1;i++){
+		profit = std::max(profit, profit1[i]+profit2[i+1]);
+	}
+	return profit;
+    }
+};
