@@ -1,67 +1,52 @@
-/*
-
-I find the optimal position every time.BUt I don't know if it's faster!
-
-
-
-*/
-
-
-
 class Solution {
 public:
-    vector<char> getChoices(vector<vector<char> > &board,int i,int j){
-        int n=9;
-        vector<char> result;
-        bool* table = new bool[9];
-		for(int k=0;k<n;k++)
-			table[k]=true;
-		for(int k=0;k<n;k++){
-			if(board[i][k]!='.')
-				table[board[i][k]-'1']=false;
-			if(board[k][j]!='.')
-				table[board[k][j]-'1']=false;
+    bool isValid(vector<vector<char> > &board,int i,int j, char c){
+		// rows, cols
+		for(int k=0;k<9;k++){
+			if(board[i][k] == c)
+                return false;
+			if(board[k][j] == c)
+				return false;
 		}
+		
 		int ii=i/3*3;
 		int jj=j/3*3;
-		for(int k=0;k<3;k++)
+		
+		for(int k=0;k<3;k++){
 			for(int l=0;l<3;l++){
-				if(board[ii+k][jj+l]!='.'){
-					table[board[ii+k][jj+l]-'1']=false;
+				if(board[ii+k][jj+l] == c){
+                    return false;
 				}
 			}
-		for(int k=0;k<n;k++){
-			if(table[k])
-				result.push_back('1'+k);
 		}
-		return result;
+		return true;
 	}
 	
-bool solve(vector<vector<char> > &board,int k){
-    if(k==81)
-        return true;
-    int i=k/9;
-    int j=k%9;
- 
-    if(board[i][j]!='.'){
-        return solve(board,k+1);
-    }
-    
-    vector<char> choices=getChoices(board,i,j);
-    for(int l=0;l<choices.size();l++){
-        board[i][j]=choices[l];
-        if(solve(board,k+1))
-            return true;
-        board[i][j]='.';
-    }
-    return false;
-}	
+    bool solve(vector<vector<char>> &board,int i, int j){
+        if(board[i][j]!='.' ){
+            if(i==8 && j==8)
+                return true;
+            if(j==8){
+                i++;
+                j=0;
+            } else {
+                j++;
+            }
+            return solve(board, i, j);
+        }
+        for(int l=0;l<9;l++){
+            if(isValid(board, i, j, '1'+l)) {
+                board[i][j]='1' + l;
+                if(solve(board, i, j))
+                    return true;
+                 board[i][j]='.';
+            }
+        }
+        return false;
+    }	
     void solveSudoku(vector<vector<char> > &board) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-    	solve(board,0);
+    	solve(board, 0, 0);
     }
 };
-
-
-
