@@ -3,23 +3,27 @@ public:
     int divide(int dividend, int divisor) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-
+    // 
+    if (divisor==0)
+        return INT_MAX;
+    if(dividend==INT_MIN && divisor==-1)
+        return INT_MAX;
     //overflow
     long long long_dividend=abs((long long)dividend);
     long long long_divisor=abs((long long)divisor);
 
     int res=0;
     while(long_dividend>=long_divisor){
-        long long tmp=long_divisor;
-        int r=1;
-        while(long_dividend>=tmp){
-            long_dividend-=tmp;
-            res+=r;
-            r<<=1;
-            tmp<<=1;
+        int shift = 1;
+        long long tmp = long_divisor << shift;
+        while(long_dividend>=tmp) {
+            shift++;
+            tmp <<= 1;
         }
+        res += (1<<(shift-1));
+        long_dividend-=(tmp>>1);
     }
-	return (dividend^divisor)>>31 ? -res : res;
+	return ( (dividend>0 && divisor>0) || (dividend<0 && divisor<0) ) ? res : -res;
     }
 };
 
