@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        int rows = dungeon.size();
+        int cols = dungeon[0].size();
+        // The minimum hp needed from beginning to reach d[i][j]
+        vector<vector<int>> min_hp(rows+1, vector<int>(cols+1, 0));
+        vector<vector<int>> hp(rows, vector<int>(cols, 0));
+        min_hp[0][0] = dungeon[0][0] <= 0 ? 1 - dungeon[0][0] : 1;
+        hp[0][0] = min_hp[0][0] + dungeon[0][0];
+        // For first row.
+        for(int j=1; j< cols; j++){
+            min_hp[0][j] = hp[0][j-1] + dungeon[0][j] > 0 ? min_hp[0][j-1] : min_hp[0][j-1] -(hp[0][j-1] + dungeon[0][j])+1;
+            hp[0][j] = hp[0][j-1] + dungeon[0][j] > 0 ? hp[0][j-1] + dungeon[0][j] : 1;
+        }
+        // For first col.
+        for(int i=1; i< rows; i++) {
+            min_hp[i][0] = hp[i-1][0] + dungeon[i][0] > 0 ? min_hp[i-1][0] : min_hp[i-1][0] -(hp[i-1][0] + dungeon[i][0])+1;
+            hp[i][0] = hp[i-1][0] + dungeon[i][0] > 0 ? hp[i-1][0] + dungeon[i][0] : 1;
+        }
+        for(int i=1; i< rows; i++) {
+            for(int j=1; j< cols; j++){
+                // From Up.
+                int up_min_hp = hp[i-1][j] + dungeon[i][j] > 0 ? min_hp[i-1][j] : min_hp[i-1][j] -(hp[i-1][j] + dungeon[i][j]) +1 ;
+                int up_hp =  hp[i][j-1] + dungeon[i][j] > 0 ? hp[i-1][j] + dungeon[i][j] : 1;
+                // From Left.
+                int left_min_hp = hp[i][j-1] + dungeon[i][j] > 0 ? min_hp[i][j-1] : min_hp[i][j-1] -(hp[i][j-1] + dungeon[i][j])+1;
+                int left_hp = hp[i][j-1] + dungeon[i][j] > 0 ? hp[i][j-1] + dungeon[i][j] : 1;
+                if(up_min_hp<left_min_hp) {
+                    min_hp[i][j] = up_min_hp;
+                    hp[i][j] = up_hp;
+                } else if (up_min_hp == left_min_hp){
+                    min_hp[i][j] = up_min_hp;
+                    hp[i][j] = std::max(up_hp, left_hp);
+                } else {
+                    min_hp[i][j] = left_min_hp;
+                    hp[i][j] =left_hp;
+                }
+            }
+        }
+        return min_hp[rows-1][cols-1];
+    }
+};
