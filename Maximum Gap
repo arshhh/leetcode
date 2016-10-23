@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int getMin(vector<int>& nums) {
+        int res = nums[0];
+        for(const auto& n: nums) {
+            res = std::min(res, n);
+        }
+        return res;
+    }
+    int getMax(vector<int>& nums) {
+        int res = nums[0];
+        for(const auto& n: nums) {
+            res = std::max(res, n);
+        }
+        return res;
+    }
+    int maximumGap(vector<int>& nums) {
+        if (nums.size()<2)
+            return 0;
+        int min = getMin(nums);
+        int max = getMax(nums);
+        if(max==min) return 0;
+        int bucket_size = (max - min) / (nums.size()-1);
+        if (bucket_size == 0) {
+            bucket_size = 1;
+        }
+        int bucket_nums = (max-min)/bucket_size + 1;
+        // Buckets.
+        vector<pair<int,int>> buckets(bucket_nums, std::make_pair(INT_MAX, INT_MIN));
+        for(int i=0; i< nums.size(); i++) {
+            int b_n = (nums[i]-min)/bucket_size;
+            pair<int, int> p = buckets[b_n];
+            if(nums[i]<p.first) {
+                p.first = nums[i];
+            }
+            if(nums[i]>p.second) {
+                p.second = nums[i];
+            }
+            buckets[b_n] = p;
+        }
+        // Make the maximum gap from adjacent buckets.
+        int res = 0;
+        int pre = 0;
+        for(int i=1; i< bucket_nums; i++) {
+            if(buckets[i].first == INT_MAX) {
+                continue;
+            }
+            res = std::max(buckets[i].first - buckets[pre].second, res);
+            pre = i;
+        }
+        return res;
+    }
+};
