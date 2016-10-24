@@ -1,0 +1,48 @@
+class Solution {
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        vector<int> res(nums.size(),0);
+        if(nums.size() == 0)
+            return res;
+        countWhileMergeSort(nums, 0, nums.size()-1, res);
+        return res;
+    }
+    void countWhileMergeSort(vector<int>& nums, int start, int end, vector<int>& res) {
+        if(end==start){
+            return;
+        }
+        int mid = (end+start)/2;
+        // Stores the mapping from value to array index. Can contains duplicates.
+        unordered_map<int, vector<int>> index;
+        for(int i=start;i<=mid;i++){
+            index[nums[i]].push_back(i);
+        }
+        //Sort left part.
+        countWhileMergeSort(nums, start, mid, res);
+        // Sort right part.
+        countWhileMergeSort(nums, mid+1, end, res);
+        vector<int> cache(end-start+1);
+        int k=mid+1;
+        int t=0;
+        for(int i=start; i <=mid; i++){
+            // Merge Sort
+            while(k<=end && nums[i]<=nums[k]) {
+                cache[t] = nums[k];
+                t++;
+                k++;
+            }
+            cache[t] = nums[i];
+            t++;
+            // Update the index, avoid update twice. 
+            if(end-k+1>0 && (i==start || (nums[i]!=nums[i-1] && i>start))) {
+                for(const auto& n: index[nums[i]]){
+                    res[n] += (end-k+1);
+                }
+            }
+        }
+        // Copy back.
+        for(int i=0;i<t;i++) {
+            nums[start+i] = cache[i];
+        }
+    }
+};
